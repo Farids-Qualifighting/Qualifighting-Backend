@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"qualifighting.backend.de/api/controllers"
+	"qualifighting.backend.de/api/middlewares"
 )
 
 func NewRouter() *gin.Engine {
@@ -14,10 +15,14 @@ func NewRouter() *gin.Engine {
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 	router.Use(cors.New(config))
 
+	user := controllers.User{}
 	grp := router.Group("/api/v1")
 
 	// HEALTHCHECK
 	grp.GET("/health", controllers.Health)
+
+	// STUDENTS ENDPOINTS
+	grp.POST("/students", middlewares.Auth, user.Create)
 
 	return router
 }
