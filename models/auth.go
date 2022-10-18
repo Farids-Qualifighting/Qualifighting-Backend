@@ -7,3 +7,6 @@ type JWTUserMiddleware struct {
 	Picture  string `json:"picture" mapstructure:"picture"`
 	SchoolID string `json:"school_id" mapstructure:"school_id"`
 }
+
+// ENUM(parent, student, faridsTeacher, trainer, schoolTeacher, superAdmin)
+type UserStatus uint8
