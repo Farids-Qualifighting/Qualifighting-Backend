@@ -4,9 +4,8 @@ go 1.18
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
-	firebase.google.com/go/v4 v4.9.0
 	github.com/JeremyLoy/config v1.5.0
-	github.com/aws/aws-sdk-go v1.44.118
+	github.com/aws/aws-sdk-go v1.44.128
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/mitchellh/mapstructure v1.5.0
