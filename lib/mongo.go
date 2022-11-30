@@ -38,3 +38,7 @@ func init() {
 func MongoDBSchoolCollection() *mongo.Collection {
 	return mongoInstance.Database("qualifighting").Collection("school")
 }
+
+func MongoDBStudentCollection() *mongo.Collection {
+	return mongoInstance.Database("qualifighting").Collection("student")
+}
