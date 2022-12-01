@@ -36,7 +36,7 @@ func (service *StudentServiceImpl) CreateStudent(student *models.Student) error 
 
 func (service *StudentServiceImpl) GetStudent(name *string) (*models.Student, error) {
 	var student *models.Student
-	query := bson.D{bson.E{Key: "student_name", Value: name}}
+	query := bson.D{bson.E{Key: "first_name", Value: name}}
 	err := service.studentCollection.FindOne(service.ctx, query).Decode(&student)
 	return student, err
 }
@@ -72,18 +72,18 @@ func (service *StudentServiceImpl) GetAll() ([]*models.Student, error) {
 }
 
 func (service *StudentServiceImpl) UpdateStudent(student *models.Student) error {
-	filter := bson.D{bson.E{Key: "student_name", Value: student.ID}}
+	filter := bson.D{bson.E{Key: "first_name", Value: student.FirstName}}
 	update := bson.D{bson.E{Key: "$set", Value: bson.D{
-		bson.E{Key: "student_name", Value: student.FirstName},
-		bson.E{Key: "student_name", Value: student.LastName},
-		bson.E{Key: "student_name", Value: student.ClassTeacher},
-		bson.E{Key: "student_name", Value: student.Birthday},
-		bson.E{Key: "student_name", Value: student.Gender},
-		bson.E{Key: "student_name", Value: student.Address},
-		bson.E{Key: "student_name", Value: student.Phone},
-		bson.E{Key: "student_name", Value: student.Email},
-		bson.E{Key: "student_name", Value: student.SocialMedia},
-		bson.E{Key: "student_age", Value: student.Certificate}}}}
+		bson.E{Key: "first_name", Value: student.FirstName},
+		bson.E{Key: "last_name", Value: student.LastName},
+		bson.E{Key: "class_teacher", Value: student.ClassTeacher},
+		bson.E{Key: "birthday", Value: student.Birthday},
+		bson.E{Key: "gender", Value: student.Gender},
+		bson.E{Key: "address", Value: student.Address},
+		bson.E{Key: "phone", Value: student.Phone},
+		bson.E{Key: "email", Value: student.Email},
+		bson.E{Key: "social_media", Value: student.SocialMedia},
+		bson.E{Key: "certificate", Value: student.Certificate}}}}
 	res, _ := service.studentCollection.UpdateOne(service.ctx, filter, update)
 
 	if res.MatchedCount != 1 {
@@ -94,7 +94,7 @@ func (service *StudentServiceImpl) UpdateStudent(student *models.Student) error 
 }
 
 func (service *StudentServiceImpl) DeleteStudent(name *string) error {
-	filter := bson.D{bson.E{Key: "student_name", Value: name}}
+	filter := bson.D{bson.E{Key: "first_name", Value: name}}
 	res, _ := service.studentCollection.DeleteOne(service.ctx, filter)
 
 	if res.DeletedCount != 1 {

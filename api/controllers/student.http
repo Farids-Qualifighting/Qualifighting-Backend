@@ -1,0 +1,58 @@
+### create student
+POST http://localhost:8080/v1/student/create
+content-type: application/json
+
+{
+  "first_name": "ulf",
+  "last_name": "ulf",
+  "class_teacher": "ulf",
+  "birthday": "0002-01-01T00:00:00Z",
+  "gender": "ulf",
+  "address": {
+    "street": "ulf",
+    "zip": 1,
+    "house_no": 1,
+    "city": "ulf"
+  },
+  "phone": "ulf",
+  "email": "ulf",
+  "social_media": "ulf",
+  "certificate": ["ulf"]
+
+}
+
+### get student by name
+GET http://localhost:8080/v1/student/get/ulf
+
+###
+
+# get all students
+GET http://localhost:8080/v1/student/all
+
+### update student
+PATCH http://localhost:8080/v1/student/update
+content-type: application/json
+
+{
+    
+  "first_name": "ulf",
+  "last_name": "ulf",
+  "class_teacher": "ulf 2.0",
+  "birthday": "0002-01-01T00:00:00Z",
+  "gender": "ulf",
+  "address": {
+    "street": "ulf",
+    "zip": 1,
+    "house_no": 1,
+    "city": "ulf"
+  },
+  "phone": "ulf",
+  "email": "ulf",
+  "social_media": "ulf",
+  "certificate": ["ulf"]
+
+}
+
+### delete student
+DELETE http://localhost:8080/v1/student/delete/ulf 
+content-type: application/json
