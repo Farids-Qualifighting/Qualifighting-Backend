@@ -21,20 +21,19 @@ content-type: application/json
 
 }
 
-### get student by name
-GET http://localhost:8080/api/v1/student/get/ulf
+### get student by id
+GET http://localhost:8080/api/v1/student/get/638b58e74cda3d69dc111976
 
 ###
 
 # get all students
 GET http://localhost:8080/api/v1/student/all
 
-### update student
-PATCH http://localhost:8080/api/v1/student/update
+### update student by id
+PATCH http://localhost:8080/api/v1/student/update/638b58e74cda3d69dc111976
 content-type: application/json
 
 {
-    
   "first_name": "ulf",
   "last_name": "ulf",
   "class_teacher": "ulf 2.0",
@@ -53,6 +52,6 @@ content-type: application/json
 
 }
 
-### delete student
-DELETE http://localhost:8080/api/v1/student/delete/ulf 
+### delete student by id
+DELETE http://localhost:8080/api/v1/student/delete/638b58e74cda3d69dc111976 
 content-type: application/json
