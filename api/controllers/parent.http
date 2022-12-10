@@ -1,0 +1,38 @@
+### create parent
+POST http://localhost:8080/api/v1/parent/create
+content-type: application/json
+
+{
+  "first_name": "ulf",
+  "last_name": "ulf",
+  "address": {
+    "street": "ulf",
+    "zip": 1,
+    "house_no": 1,
+    "city": "ulf"
+  },
+  "phone": "ulf",
+  "email": "ulf",
+  "children" : ["639487bde900f99197853a1b"]
+
+}
+
+### get parent by id
+GET http://localhost:8080/api/v1/parent/get/6392336d2d3dbf230d1f3f03
+
+###
+
+# get all parent
+GET http://localhost:8080/api/v1/parent/all
+
+### update parent by id
+PATCH http://localhost:8080/api/v1/parent/update/63923811199afcdde628b678
+content-type: application/json
+
+{
+  "email": "ulf42"
+}
+
+### delete parent by id
+DELETE http://localhost:8080/api/v1/parent/delete/6392336d2d3dbf230d1f3f03 
+content-type: application/json

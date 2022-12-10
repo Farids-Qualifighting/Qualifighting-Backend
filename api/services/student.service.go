@@ -11,26 +11,24 @@ import (
 )
 
 type StudentService interface {
-	CreateStudent(*models.Student) error
-	GetStudent(*primitive.ObjectID) (*models.Student, error)
-	GetAll() ([]*models.Student, error)
-	UpdateStudent(*primitive.ObjectID, *models.Student) error
-	DeleteStudent(*primitive.ObjectID) error
+	CreateStudent(*models.Student, context.Context) error
+	GetStudent(*primitive.ObjectID, context.Context) (*models.Student, error)
+	GetAllStudents(context.Context) ([]*models.Student, error)
+	UpdateStudent(*primitive.ObjectID, *models.UpdateStudent, context.Context) error
+	DeleteStudent(*primitive.ObjectID, context.Context) error
 }
 
 type StudentServiceImpl struct {
 	studentCollection *mongo.Collection
-	ctx               context.Context
 }
 
-func NewStudentService(studentCollection *mongo.Collection, ctx context.Context) StudentService {
+func NewStudentService(studentCollection *mongo.Collection) StudentService {
 	return &StudentServiceImpl{
 		studentCollection: studentCollection,
-		ctx:               ctx,
 	}
 }
 
-func (service *StudentServiceImpl) CreateStudent(student *models.Student) error {
+func (service *StudentServiceImpl) CreateStudent(student *models.Student, ctx context.Context) error {
 
 	payload := models.Student{
 		ID:           primitive.NewObjectID(),
@@ -46,26 +44,26 @@ func (service *StudentServiceImpl) CreateStudent(student *models.Student) error 
 		Certificate:  student.Certificate,
 	}
 
-	_, err := service.studentCollection.InsertOne(service.ctx, payload)
+	_, err := service.studentCollection.InsertOne(ctx, payload)
 	return err
 }
 
-func (service *StudentServiceImpl) GetStudent(id *primitive.ObjectID) (*models.Student, error) {
+func (service *StudentServiceImpl) GetStudent(id *primitive.ObjectID, ctx context.Context) (*models.Student, error) {
 	var student *models.Student
 	query := bson.D{bson.E{Key: "_id", Value: id}}
-	err := service.studentCollection.FindOne(service.ctx, query).Decode(&student)
+	err := service.studentCollection.FindOne(ctx, query).Decode(&student)
 	return student, err
 }
 
-func (service *StudentServiceImpl) GetAll() ([]*models.Student, error) {
+func (service *StudentServiceImpl) GetAllStudents(ctx context.Context) ([]*models.Student, error) {
 	var students []*models.Student
-	cursor, err := service.studentCollection.Find(service.ctx, bson.D{{}})
+	cursor, err := service.studentCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
 		return nil, err
 	}
 
-	for cursor.Next(service.ctx) {
+	for cursor.Next(ctx) {
 		var student models.Student
 		err := cursor.Decode(&student)
 		if err != nil {
@@ -78,7 +76,7 @@ func (service *StudentServiceImpl) GetAll() ([]*models.Student, error) {
 		return nil, err
 	}
 
-	cursor.Close(service.ctx)
+	cursor.Close(ctx)
 
 	if len(students) == 0 {
 		return nil, errors.New("no students in database")
@@ -87,20 +85,14 @@ func (service *StudentServiceImpl) GetAll() ([]*models.Student, error) {
 	return students, nil
 }
 
-func (service *StudentServiceImpl) UpdateStudent(id *primitive.ObjectID, student *models.Student) error {
+func (service *StudentServiceImpl) UpdateStudent(id *primitive.ObjectID, student *models.UpdateStudent, ctx context.Context) error {
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	update := bson.D{bson.E{Key: "$set", Value: bson.D{
-		bson.E{Key: "first_name", Value: student.FirstName},
-		bson.E{Key: "last_name", Value: student.LastName},
-		bson.E{Key: "class_teacher", Value: student.ClassTeacher},
-		bson.E{Key: "birthday", Value: student.Birthday},
-		bson.E{Key: "gender", Value: student.Gender},
-		bson.E{Key: "address", Value: student.Address},
-		bson.E{Key: "phone", Value: student.Phone},
-		bson.E{Key: "email", Value: student.Email},
-		bson.E{Key: "social_media", Value: student.SocialMedia},
-		bson.E{Key: "certificate", Value: student.Certificate}}}}
-	res, _ := service.studentCollection.UpdateOne(service.ctx, filter, update)
+	update := bson.D{bson.E{Key: "$set", Value: student}}
+	res, err := service.studentCollection.UpdateOne(ctx, filter, update)
+
+	if err != nil {
+		return err
+	}
 
 	if res.MatchedCount != 1 {
 		return errors.New("student not found")
@@ -109,9 +101,13 @@ func (service *StudentServiceImpl) UpdateStudent(id *primitive.ObjectID, student
 	return nil
 }
 
-func (service *StudentServiceImpl) DeleteStudent(id *primitive.ObjectID) error {
+func (service *StudentServiceImpl) DeleteStudent(id *primitive.ObjectID, ctx context.Context) error {
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	res, _ := service.studentCollection.DeleteOne(service.ctx, filter)
+	res, err := service.studentCollection.DeleteOne(ctx, filter)
+
+	if err != nil {
+		return err
+	}
 
 	if res.DeletedCount != 1 {
 		return errors.New("student not found")

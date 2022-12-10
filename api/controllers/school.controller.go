@@ -1,0 +1,104 @@
+package controllers
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"qualifighting.backend.de/api/services"
+	"qualifighting.backend.de/models"
+)
+
+type SchoolController struct {
+	SchoolService services.SchoolService
+}
+
+func NewSchoolController(schoolService services.SchoolService) SchoolController {
+	return SchoolController{
+		SchoolService: schoolService,
+	}
+}
+
+func (controller *SchoolController) CreateSchool(ctx *gin.Context) {
+	var school models.School
+
+	if err := ctx.ShouldBindJSON(&school); err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	err := controller.SchoolService.CreateSchool(&school, ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
+func (controller *SchoolController) GetSchool(ctx *gin.Context) {
+	id := ctx.Param("id")
+	objectId, _ := primitive.ObjectIDFromHex(id)
+	school, err := controller.SchoolService.GetSchool(&objectId, ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, school)
+}
+
+func (controller *SchoolController) GetAllSchools(ctx *gin.Context) {
+	schools, err := controller.SchoolService.GetAllSchools(ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, schools)
+}
+
+func (controller *SchoolController) UpdateSchool(ctx *gin.Context) {
+	var school models.UpdateSchool
+
+	id := ctx.Param("id")
+	objectId, _ := primitive.ObjectIDFromHex(id)
+
+	if err := ctx.ShouldBindJSON(&school); err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	err := controller.SchoolService.UpdateSchool(&objectId, &school, ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
+func (controller *SchoolController) DeleteSchool(ctx *gin.Context) {
+	id := ctx.Param("id")
+	objectId, _ := primitive.ObjectIDFromHex(id)
+	err := controller.SchoolService.DeleteSchool(&objectId, ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
+func (controller *SchoolController) RegisterSchoolRoutes(routerGroup *gin.RouterGroup) {
+	schoolRoute := routerGroup.Group("/school")
+
+	schoolRoute.POST("/create", controller.CreateSchool)
+	schoolRoute.GET("/get/:id", controller.GetSchool)
+	schoolRoute.GET("/all", controller.GetAllSchools)
+	schoolRoute.PATCH("/update/:id", controller.UpdateSchool)
+	schoolRoute.DELETE("/delete/:id", controller.DeleteSchool)
+}

@@ -13,7 +13,7 @@ type StudentController struct {
 	StudentService services.StudentService
 }
 
-func New(studentService services.StudentService) StudentController {
+func NewStudentController(studentService services.StudentService) StudentController {
 	return StudentController{
 		StudentService: studentService,
 	}
@@ -27,7 +27,7 @@ func (controller *StudentController) CreateStudent(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.StudentService.CreateStudent(&student)
+	err := controller.StudentService.CreateStudent(&student, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -38,7 +38,7 @@ func (controller *StudentController) CreateStudent(ctx *gin.Context) {
 func (controller *StudentController) GetStudent(ctx *gin.Context) {
 	id := ctx.Param("id")
 	objectId, _ := primitive.ObjectIDFromHex(id)
-	student, err := controller.StudentService.GetStudent(&objectId)
+	student, err := controller.StudentService.GetStudent(&objectId, ctx)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
@@ -49,18 +49,18 @@ func (controller *StudentController) GetStudent(ctx *gin.Context) {
 }
 
 func (controller *StudentController) GetAll(ctx *gin.Context) {
-	users, err := controller.StudentService.GetAll()
+	students, err := controller.StudentService.GetAllStudents(ctx)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, users)
+	ctx.JSON(http.StatusOK, students)
 }
 
 func (controller *StudentController) UpdateStudent(ctx *gin.Context) {
-	var student models.Student
+	var student models.UpdateStudent
 
 	id := ctx.Param("id")
 	objectId, _ := primitive.ObjectIDFromHex(id)
@@ -70,10 +70,10 @@ func (controller *StudentController) UpdateStudent(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.StudentService.UpdateStudent(&objectId, &student)
+	err := controller.StudentService.UpdateStudent(&objectId, &student, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -83,7 +83,7 @@ func (controller *StudentController) UpdateStudent(ctx *gin.Context) {
 func (controller *StudentController) DeleteStudent(ctx *gin.Context) {
 	id := ctx.Param("id")
 	objectId, _ := primitive.ObjectIDFromHex(id)
-	err := controller.StudentService.DeleteStudent(&objectId)
+	err := controller.StudentService.DeleteStudent(&objectId, ctx)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
