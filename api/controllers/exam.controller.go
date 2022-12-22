@@ -94,11 +94,10 @@ func (controller *ExamController) DeleteExam(ctx *gin.Context) {
 }
 
 func (controller *ExamController) RegisterExamRoutes(routerGroup *gin.RouterGroup) {
-	examRoute := routerGroup.Group("/exam")
 
-	examRoute.POST("/create", controller.CreateExam)
-	examRoute.GET("/get/:id", controller.GetExam)
-	examRoute.GET("/all", controller.GetAllExams)
-	examRoute.PATCH("/update/:id", controller.UpdateExams)
-	examRoute.DELETE("/delete/:id", controller.DeleteExam)
+	routerGroup.POST("/exams", controller.CreateExam)
+	routerGroup.GET("/exams/:id", controller.GetExam)
+	routerGroup.GET("/exams", controller.GetAllExams)
+	routerGroup.PATCH("/exams/:id", controller.UpdateExams)
+	routerGroup.DELETE("/exams/:id", controller.DeleteExam)
 }

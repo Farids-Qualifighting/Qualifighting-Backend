@@ -5,7 +5,7 @@ import (
 )
 
 type Teacher struct {
-	ID        primitive.ObjectID   `bson:"_id"`
+	ID        primitive.ObjectID   `bson:"_id,omitempty"`
 	FirstName string               `json:"first_name" bson:"first_name" binding:"required"`
 	LastName  string               `json:"last_name" bson:"last_name" binding:"required"`
 	SchoolID  []primitive.ObjectID `json:"won_competition" bson:"won_competition" binding:"required"`

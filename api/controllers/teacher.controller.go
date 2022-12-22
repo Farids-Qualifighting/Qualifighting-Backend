@@ -94,11 +94,10 @@ func (controller *TeacherController) DeleteTeacher(ctx *gin.Context) {
 }
 
 func (controller *TeacherController) RegisterTeacherRoutes(routerGroup *gin.RouterGroup) {
-	teacherRoute := routerGroup.Group("/teacher")
 
-	teacherRoute.POST("/create", controller.CreateTeacher)
-	teacherRoute.GET("/get/:id", controller.GetTeacher)
-	teacherRoute.GET("/all", controller.GetAllTeachers)
-	teacherRoute.PATCH("/update/:id", controller.UpdateTeacher)
-	teacherRoute.DELETE("/delete/:id", controller.DeleteTeacher)
+	routerGroup.POST("/teachers", controller.CreateTeacher)
+	routerGroup.GET("/teachers/:id", controller.GetTeacher)
+	routerGroup.GET("/teachers", controller.GetAllTeachers)
+	routerGroup.PATCH("/teachers/:id", controller.UpdateTeacher)
+	routerGroup.DELETE("/teachers/:id", controller.DeleteTeacher)
 }

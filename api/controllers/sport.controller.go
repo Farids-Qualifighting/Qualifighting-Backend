@@ -94,11 +94,10 @@ func (controller *SportController) DeleteSport(ctx *gin.Context) {
 }
 
 func (controller *SportController) RegisterSportRoutes(routerGroup *gin.RouterGroup) {
-	sportRoute := routerGroup.Group("/sport")
 
-	sportRoute.POST("/create", controller.CreateSport)
-	sportRoute.GET("/get/:id", controller.GetSport)
-	sportRoute.GET("/all", controller.GetAllSports)
-	sportRoute.PATCH("/update/:id", controller.UpdateSport)
-	sportRoute.DELETE("/delete/:id", controller.DeleteSport)
+	routerGroup.POST("/sports", controller.CreateSport)
+	routerGroup.GET("/sports/:id", controller.GetSport)
+	routerGroup.GET("/sports", controller.GetAllSports)
+	routerGroup.PATCH("/sports/:id", controller.UpdateSport)
+	routerGroup.DELETE("/sports/:id", controller.DeleteSport)
 }

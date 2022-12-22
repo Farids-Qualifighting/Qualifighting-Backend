@@ -3,7 +3,7 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Parent struct {
-	ID        primitive.ObjectID   `bson:"_id"`
+	ID        primitive.ObjectID   `bson:"_id,omitempty"`
 	FirstName string               `json:"first_name" bson:"first_name" binding:"required"`
 	LastName  string               `json:"last_name" bson:"last_name" binding:"required"`
 	Children  []primitive.ObjectID `json:"children" bson:"children" binding:"required"`

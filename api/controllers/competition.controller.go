@@ -94,11 +94,10 @@ func (controller *CompetitionController) DeleteCompetition(ctx *gin.Context) {
 }
 
 func (controller *CompetitionController) RegisterCompetitionRoutes(routerGroup *gin.RouterGroup) {
-	competitionRoute := routerGroup.Group("/competition")
 
-	competitionRoute.POST("/create", controller.CreateCompetition)
-	competitionRoute.GET("/get/:id", controller.GetCompetition)
-	competitionRoute.GET("/all", controller.GetAllCompetitions)
-	competitionRoute.PATCH("/update/:id", controller.UpdateCompetition)
-	competitionRoute.DELETE("/delete/:id", controller.DeleteCompetition)
+	routerGroup.POST("/competitions", controller.CreateCompetition)
+	routerGroup.GET("/competitions/:id", controller.GetCompetition)
+	routerGroup.GET("/competitions", controller.GetAllCompetitions)
+	routerGroup.PATCH("/competitions/:id", controller.UpdateCompetition)
+	routerGroup.DELETE("/competitions/:id", controller.DeleteCompetition)
 }

@@ -94,11 +94,10 @@ func (controller *SubjectController) DeleteSubject(ctx *gin.Context) {
 }
 
 func (controller *SubjectController) RegisterSubjectRoutes(routerGroup *gin.RouterGroup) {
-	subjectRoute := routerGroup.Group("/subject")
 
-	subjectRoute.POST("/create", controller.CreateSubject)
-	subjectRoute.GET("/get/:id", controller.GetSubject)
-	subjectRoute.GET("/all", controller.GetAllSubjects)
-	subjectRoute.PATCH("/update/:id", controller.UpdateSubject)
-	subjectRoute.DELETE("/delete/:id", controller.DeleteSubject)
+	routerGroup.POST("/subjects", controller.CreateSubject)
+	routerGroup.GET("/subjects/:id", controller.GetSubject)
+	routerGroup.GET("/subjects", controller.GetAllSubjects)
+	routerGroup.PATCH("/subjects/:id", controller.UpdateSubject)
+	routerGroup.DELETE("/subjects/:id", controller.DeleteSubject)
 }

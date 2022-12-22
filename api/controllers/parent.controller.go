@@ -94,11 +94,10 @@ func (controller *ParentController) DeleteParent(ctx *gin.Context) {
 }
 
 func (controller *ParentController) RegisterParentRoutes(routerGroup *gin.RouterGroup) {
-	parentRoute := routerGroup.Group("/parent")
 
-	parentRoute.POST("/create", controller.CreateParent)
-	parentRoute.GET("/get/:id", controller.GetParent)
-	parentRoute.GET("/all", controller.GetAllParents)
-	parentRoute.PATCH("/update/:id", controller.UpdateParent)
-	parentRoute.DELETE("/delete/:id", controller.DeleteParent)
+	routerGroup.POST("/parents", controller.CreateParent)
+	routerGroup.GET("/parents/:id", controller.GetParent)
+	routerGroup.GET("/parents", controller.GetAllParents)
+	routerGroup.PATCH("/parents/:id", controller.UpdateParent)
+	routerGroup.DELETE("/parents/:id", controller.DeleteParent)
 }

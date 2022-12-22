@@ -31,7 +31,6 @@ func NewStudentService(studentCollection *mongo.Collection) StudentService {
 func (service *StudentServiceImpl) CreateStudent(student *models.Student, ctx context.Context) error {
 
 	payload := models.Student{
-		ID:           primitive.NewObjectID(),
 		FirstName:    student.FirstName,
 		LastName:     student.LastName,
 		ClassTeacher: student.ClassTeacher,

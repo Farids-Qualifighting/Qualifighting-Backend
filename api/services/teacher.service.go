@@ -31,7 +31,6 @@ func NewTeacherService(teacherCollection *mongo.Collection) TeacherService {
 func (service *TeacherServiceImpl) CreateTeacher(teacher *models.Teacher, ctx context.Context) error {
 
 	payload := models.Teacher{
-		ID:        primitive.NewObjectID(),
 		FirstName: teacher.FirstName,
 		LastName:  teacher.LastName,
 		SchoolID:  teacher.SchoolID,

@@ -31,7 +31,6 @@ func NewParentService(parentCollection *mongo.Collection) ParentService {
 func (service *ParentServiceImpl) CreateParent(parent *models.Parent, ctx context.Context) error {
 
 	payload := models.Parent{
-		ID:        primitive.NewObjectID(),
 		FirstName: parent.FirstName,
 		LastName:  parent.LastName,
 		Children:  parent.Children,

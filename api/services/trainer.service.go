@@ -31,7 +31,6 @@ func NewTrainerService(trainerCollection *mongo.Collection) TrainerService {
 func (service *TrainerServiceImpl) CreateTrainer(trainer *models.Trainer, ctx context.Context) error {
 
 	payload := models.Trainer{
-		ID:         primitive.NewObjectID(),
 		FirstName:  trainer.FirstName,
 		LastName:   trainer.LastName,
 		StudentIDs: trainer.Sport,

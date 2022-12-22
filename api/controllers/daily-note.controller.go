@@ -94,11 +94,10 @@ func (controller *DailyNoteController) DeleteDailyNote(ctx *gin.Context) {
 }
 
 func (controller *DailyNoteController) RegisterDailyNoteRoutes(routerGroup *gin.RouterGroup) {
-	dailyNotesRoute := routerGroup.Group("/daily-note")
 
-	dailyNotesRoute.POST("/create", controller.CreateDailyNote)
-	dailyNotesRoute.GET("/get/:id", controller.GetDailyNote)
-	dailyNotesRoute.GET("/all", controller.GetAllDailyNotes)
-	dailyNotesRoute.PATCH("/update/:id", controller.UpdateDailyNotes)
-	dailyNotesRoute.DELETE("/delete/:id", controller.DeleteDailyNote)
+	routerGroup.POST("/daily-notes", controller.CreateDailyNote)
+	routerGroup.GET("/daily-note/:id", controller.GetDailyNote)
+	routerGroup.GET("/daily-notes", controller.GetAllDailyNotes)
+	routerGroup.PATCH("/daily-notes/:id", controller.UpdateDailyNotes)
+	routerGroup.DELETE("/daily-notes/:id", controller.DeleteDailyNote)
 }

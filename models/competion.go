@@ -7,7 +7,7 @@ import (
 )
 
 type Competition struct {
-	ID             primitive.ObjectID `bson:"_id"`
+	ID             primitive.ObjectID `bson:"_id,omitempty"`
 	Name           string             `json:"name" bson:"name" binding:"required"`
 	Date           time.Time          `json:"date" bson:"date" binding:"required"`
 	Rank           uint8              `json:"rank" bson:"rank" binding:"required"`

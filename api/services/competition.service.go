@@ -31,7 +31,6 @@ func NewCompetitionService(competitionCollection *mongo.Collection) CompetitionS
 func (service *CompetitionServiceImpl) CreateCompetition(competition *models.Competition, ctx context.Context) error {
 
 	payload := models.Competition{
-		ID:             primitive.NewObjectID(),
 		Name:           competition.Name,
 		Date:           competition.Date,
 		Rank:           competition.Rank,
