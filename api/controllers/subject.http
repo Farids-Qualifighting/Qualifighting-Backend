@@ -1,42 +1,31 @@
-### create student
-POST http://localhost:8080/api/v1/student/create
+### create subject
+POST http://localhost:8080/api/v1/subjects/
 content-type: application/json
 
 {
-  "first_name": "ulf",
-  "last_name": "ulf",
-  "class_teacher": "ulf",
-  "birthday": "0002-01-01T00:00:00Z",
-  "gender": "ulf",
-  "address": {
-    "street": "ulf",
-    "zip": 1,
-    "house_no": 1,
-    "city": "ulf"
-  },
-  "phone": "ulf",
-  "email": "ulf",
-  "social_media": "ulf",
-  "certificate": ["ulf"]
+  "name": "ulf",
+  "teacher":  "6392336d2d3dbf230d1f3f03",
+  "school_id": "6392336d2d3dbf230d1f3f03",
+  "student_ids": ["6392336d2d3dbf230d1f3f03"]
 
 }
 
-### get student by id
-GET http://localhost:8080/api/v1/student/get/6392336d2d3dbf230d1f3f03
+### get subject by id
+GET http://localhost:8080/api/v1/subjects/63a4c8ce4a3f5b55f5e5006a
 
 ###
 
-# get all students
-GET http://localhost:8080/api/v1/student/all
+# get all subjects
+GET http://localhost:8080/api/v1/subjects/
 
-### update student by id
-PATCH http://localhost:8080/api/v1/student/update/63923811199afcdde628b678
+### update subject by id
+PATCH http://localhost:8080/api/v1/subjects/63a4c8ce4a3f5b55f5e5006a
 content-type: application/json
 
 {
-  "email": "ulf42"
+  "name": "ulf42"
 }
 
-### delete student by id
-DELETE http://localhost:8080/api/v1/student/delete/6392336d2d3dbf230d1f3f03 
+### delete subject by id
+DELETE http://localhost:8080/api/v1/subjects/63a4c8ce4a3f5b55f5e5006a 
 content-type: application/json

@@ -52,7 +52,7 @@ func (service *DailyNoteServiceImpl) GetDailyNote(id *primitive.ObjectID, ctx co
 }
 
 func (service *DailyNoteServiceImpl) GetAllDailyNotes(ctx context.Context) ([]*models.DailyNote, error) {
-	var dailyNotes []*models.DailyNote
+	var dailyNotes []*models.DailyNote = make([]*models.DailyNote, 0)
 	cursor, err := service.dailyNoteCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -73,10 +73,6 @@ func (service *DailyNoteServiceImpl) GetAllDailyNotes(ctx context.Context) ([]*m
 	}
 
 	cursor.Close(ctx)
-
-	if len(dailyNotes) == 0 {
-		return nil, errors.New("no dailyNotes in database")
-	}
 
 	return dailyNotes, nil
 }

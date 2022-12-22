@@ -23,13 +23,13 @@ func (controller *SubjectGradeController) CreateSubjectGrade(ctx *gin.Context) {
 	var subjectGrade models.SubjectGrade
 
 	if err := ctx.ShouldBindJSON(&subjectGrade); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.SubjectGradeService.CreateSubjectGrade(&subjectGrade, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -37,11 +37,17 @@ func (controller *SubjectGradeController) CreateSubjectGrade(ctx *gin.Context) {
 
 func (controller *SubjectGradeController) GetSubjectGrade(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
 	subjectGrade, err := controller.SubjectGradeService.GetSubjectGrade(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +58,7 @@ func (controller *SubjectGradeController) GetAllSubjectGrades(ctx *gin.Context) 
 	subjectGrades, err := controller.SubjectGradeService.GetAllSubjectGrades(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -63,16 +69,21 @@ func (controller *SubjectGradeController) UpdateSubjectGrade(ctx *gin.Context) {
 	var subjectGrade models.UpdateSubjectGrade
 
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
-	if err := ctx.ShouldBindJSON(&subjectGrade); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := controller.SubjectGradeService.UpdateSubjectGrade(&objectId, &subjectGrade, ctx)
+	if err := ctx.ShouldBindJSON(&subjectGrade); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
-	if err != nil {
+	errService := controller.SubjectGradeService.UpdateSubjectGrade(&objectId, &subjectGrade, ctx)
+
+	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
@@ -82,11 +93,17 @@ func (controller *SubjectGradeController) UpdateSubjectGrade(ctx *gin.Context) {
 
 func (controller *SubjectGradeController) DeleteSubjectGrade(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
-	err := controller.SubjectGradeService.DeleteSubjectGrade(&objectId, ctx)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	errService := controller.SubjectGradeService.DeleteSubjectGrade(&objectId, ctx)
+
+	if errService != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

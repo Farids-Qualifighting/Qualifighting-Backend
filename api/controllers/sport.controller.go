@@ -23,13 +23,13 @@ func (controller *SportController) CreateSport(ctx *gin.Context) {
 	var sport models.Sport
 
 	if err := ctx.ShouldBindJSON(&sport); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.SportService.CreateSport(&sport, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -37,11 +37,17 @@ func (controller *SportController) CreateSport(ctx *gin.Context) {
 
 func (controller *SportController) GetSport(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
 	student, err := controller.SportService.GetSport(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +58,7 @@ func (controller *SportController) GetAllSports(ctx *gin.Context) {
 	sports, err := controller.SportService.GetAllSports(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -63,16 +69,21 @@ func (controller *SportController) UpdateSport(ctx *gin.Context) {
 	var sport models.UpdateSport
 
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
-	if err := ctx.ShouldBindJSON(&sport); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := controller.SportService.UpdateSport(&objectId, &sport, ctx)
+	if err := ctx.ShouldBindJSON(&sport); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
-	if err != nil {
+	errService := controller.SportService.UpdateSport(&objectId, &sport, ctx)
+
+	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
@@ -82,11 +93,17 @@ func (controller *SportController) UpdateSport(ctx *gin.Context) {
 
 func (controller *SportController) DeleteSport(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
-	err := controller.SportService.DeleteSport(&objectId, ctx)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	errService := controller.SportService.DeleteSport(&objectId, ctx)
+
+	if errService != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

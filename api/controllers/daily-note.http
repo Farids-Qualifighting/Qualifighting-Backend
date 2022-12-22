@@ -1,5 +1,5 @@
 ### create daily-note
-POST http://localhost:8080/api/v1/daily-note/create
+POST http://localhost:8080/api/v1/daily-notes
 content-type: application/json
 
 {
@@ -13,15 +13,15 @@ content-type: application/json
 }
 
 ### get daily-note by id
-GET http://localhost:8080/api/v1/daily-note/get/6394b66da76425ec0b6624a4
+GET http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7
 
 ###
 
 # get all daily-notes
-GET http://localhost:8080/api/v1/daily-note/all
+GET http://localhost:8080/api/v1/daily-notes/
 
 ### update daily-note by id
-PATCH http://localhost:8080/api/v1/daily-note/update/6394b66da76425ec0b6624a4
+PATCH http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7
 content-type: application/json
 
 {
@@ -29,5 +29,5 @@ content-type: application/json
 }
 
 ### delete daily-note by id
-DELETE http://localhost:8080/api/v1/daily-note/delete/6394b66da76425ec0b6624a4 
+DELETE http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7 
 content-type: application/json

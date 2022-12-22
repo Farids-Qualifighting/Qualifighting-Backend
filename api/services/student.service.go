@@ -55,7 +55,7 @@ func (service *StudentServiceImpl) GetStudent(id *primitive.ObjectID, ctx contex
 }
 
 func (service *StudentServiceImpl) GetAllStudents(ctx context.Context) ([]*models.Student, error) {
-	var students []*models.Student
+	var students []*models.Student = make([]*models.Student, 0)
 	cursor, err := service.studentCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -76,10 +76,6 @@ func (service *StudentServiceImpl) GetAllStudents(ctx context.Context) ([]*model
 	}
 
 	cursor.Close(ctx)
-
-	if len(students) == 0 {
-		return nil, errors.New("no students in database")
-	}
 
 	return students, nil
 }

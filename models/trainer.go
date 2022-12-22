@@ -11,8 +11,8 @@ type Trainer struct {
 }
 
 type UpdateTrainer struct {
-	FirstName string               `json:"first_name" bson:"first_name"`
-	LastName  string               `json:"last_name" bson:"last_name"`
-	StudentID []primitive.ObjectID `json:"student_ids" bson:"student_id"`
-	Sport     []primitive.ObjectID `json:"sport" bson:"sport"`
+	FirstName string               `json:"first_name" bson:"first_name,omitempty"`
+	LastName  string               `json:"last_name" bson:"last_name,omitempty"`
+	StudentID []primitive.ObjectID `json:"student_ids" bson:"student_id,omitempty"`
+	Sport     []primitive.ObjectID `json:"sport" bson:"sport,omitempty"`
 }

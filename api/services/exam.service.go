@@ -48,7 +48,7 @@ func (service *ExamServiceImpl) GetExam(id *primitive.ObjectID, ctx context.Cont
 }
 
 func (service *ExamServiceImpl) GetAllExams(ctx context.Context) ([]*models.Exam, error) {
-	var exams []*models.Exam
+	var exams []*models.Exam = make([]*models.Exam, 0)
 	cursor, err := service.examCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -69,10 +69,6 @@ func (service *ExamServiceImpl) GetAllExams(ctx context.Context) ([]*models.Exam
 	}
 
 	cursor.Close(ctx)
-
-	if len(exams) == 0 {
-		return nil, errors.New("no exams in database")
-	}
 
 	return exams, nil
 }

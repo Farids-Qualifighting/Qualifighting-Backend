@@ -23,13 +23,13 @@ func (controller *SubjectController) CreateSubject(ctx *gin.Context) {
 	var subject models.Subject
 
 	if err := ctx.ShouldBindJSON(&subject); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.SubjectService.CreateSubject(&subject, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -41,7 +41,7 @@ func (controller *SubjectController) GetSubject(ctx *gin.Context) {
 	student, err := controller.SubjectService.GetSubject(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +52,7 @@ func (controller *SubjectController) GetAllSubjects(ctx *gin.Context) {
 	subjects, err := controller.SubjectService.GetAllSubjects(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -66,7 +66,7 @@ func (controller *SubjectController) UpdateSubject(ctx *gin.Context) {
 	objectId, _ := primitive.ObjectIDFromHex(id)
 
 	if err := ctx.ShouldBindJSON(&subject); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -86,7 +86,7 @@ func (controller *SubjectController) DeleteSubject(ctx *gin.Context) {
 	err := controller.SubjectService.DeleteSubject(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

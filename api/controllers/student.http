@@ -1,5 +1,5 @@
 ### create student
-POST http://localhost:8080/api/v1/student/create
+POST http://localhost:8080/api/v1/students/
 content-type: application/json
 
 {
@@ -18,25 +18,27 @@ content-type: application/json
   "email": "ulf",
   "social_media": "ulf",
   "certificate": ["ulf"]
-
 }
 
 ### get student by id
-GET http://localhost:8080/api/v1/student/get/6392336d2d3dbf230d1f3f03
+GET http://localhost:8080/api/v1/students/63a4c7ea4a3f5b55f5e50068
 
 ###
 
 # get all students
-GET http://localhost:8080/api/v1/student/all
+GET http://localhost:8080/api/v1/students/
 
 ### update student by id
-PATCH http://localhost:8080/api/v1/student/update/63923811199afcdde628b678
+PATCH http://localhost:8080/api/v1/students/63a4c7ea4a3f5b55f5e50068
 content-type: application/json
 
 {
-  "email": "ulf42"
-}
+  "email": "NEW MAIL",
+  "address": {
+    "street": "NEW STREET"
+  }
+} 
 
 ### delete student by id
-DELETE http://localhost:8080/api/v1/student/delete/6392336d2d3dbf230d1f3f03 
+DELETE http://localhost:8080/api/v1/students/63a4c7ea4a3f5b55f5e50068 
 content-type: application/json

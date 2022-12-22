@@ -1,5 +1,5 @@
 ### create parent
-POST http://localhost:8080/api/v1/parent/create
+POST http://localhost:8080/api/v1/parents/
 content-type: application/json
 
 {
@@ -18,21 +18,24 @@ content-type: application/json
 }
 
 ### get parent by id
-GET http://localhost:8080/api/v1/parent/get/6392336d2d3dbf230d1f3f03
+GET http://localhost:8080/api/v1/parents/63a4c4ee11fba69c2364381e
 
 ###
 
 # get all parent
-GET http://localhost:8080/api/v1/parent/all
+GET http://localhost:8080/api/v1/parents/
 
 ### update parent by id
-PATCH http://localhost:8080/api/v1/parent/update/63923811199afcdde628b678
+PATCH http://localhost:8080/api/v1/parents/63a4c4ee11fba69c2364381e
 content-type: application/json
 
 {
-  "email": "ulf42"
+  "email": "NEW MAIL",
+   "address": {
+    "street": "NEW STREET"
+  }
 }
 
 ### delete parent by id
-DELETE http://localhost:8080/api/v1/parent/delete/6392336d2d3dbf230d1f3f03 
+DELETE http://localhost:8080/api/v1/parents/63a4c4ee11fba69c2364381e 
 content-type: application/json

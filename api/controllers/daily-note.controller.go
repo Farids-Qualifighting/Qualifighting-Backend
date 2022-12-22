@@ -23,13 +23,13 @@ func (controller *DailyNoteController) CreateDailyNote(ctx *gin.Context) {
 	var note models.DailyNote
 
 	if err := ctx.ShouldBindJSON(&note); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.DailyNoteService.CreateDailyNote(&note, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -37,11 +37,17 @@ func (controller *DailyNoteController) CreateDailyNote(ctx *gin.Context) {
 
 func (controller *DailyNoteController) GetDailyNote(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
-	note, err := controller.DailyNoteService.GetDailyNote(&objectId, ctx)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	note, errService := controller.DailyNoteService.GetDailyNote(&objectId, ctx)
+
+	if errService != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +58,7 @@ func (controller *DailyNoteController) GetAllDailyNotes(ctx *gin.Context) {
 	notes, err := controller.DailyNoteService.GetAllDailyNotes(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -63,16 +69,21 @@ func (controller *DailyNoteController) UpdateDailyNotes(ctx *gin.Context) {
 	var note models.UpdateDailyNote
 
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
-	if err := ctx.ShouldBindJSON(&note); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := controller.DailyNoteService.UpdateDailyNote(&objectId, &note, ctx)
+	if err := ctx.ShouldBindJSON(&note); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
-	if err != nil {
+	errService := controller.DailyNoteService.UpdateDailyNote(&objectId, &note, ctx)
+
+	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
@@ -82,11 +93,17 @@ func (controller *DailyNoteController) UpdateDailyNotes(ctx *gin.Context) {
 
 func (controller *DailyNoteController) DeleteDailyNote(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
-	err := controller.DailyNoteService.DeleteDailyNote(&objectId, ctx)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	errService := controller.DailyNoteService.DeleteDailyNote(&objectId, ctx)
+
+	if errService != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -96,7 +113,7 @@ func (controller *DailyNoteController) DeleteDailyNote(ctx *gin.Context) {
 func (controller *DailyNoteController) RegisterDailyNoteRoutes(routerGroup *gin.RouterGroup) {
 
 	routerGroup.POST("/daily-notes", controller.CreateDailyNote)
-	routerGroup.GET("/daily-note/:id", controller.GetDailyNote)
+	routerGroup.GET("/daily-notes/:id", controller.GetDailyNote)
 	routerGroup.GET("/daily-notes", controller.GetAllDailyNotes)
 	routerGroup.PATCH("/daily-notes/:id", controller.UpdateDailyNotes)
 	routerGroup.DELETE("/daily-notes/:id", controller.DeleteDailyNote)

@@ -48,7 +48,7 @@ func (service *SubjectGradeServiceImpl) GetSubjectGrade(id *primitive.ObjectID, 
 }
 
 func (service *SubjectGradeServiceImpl) GetAllSubjectGrades(ctx context.Context) ([]*models.SubjectGrade, error) {
-	var subjectGrades []*models.SubjectGrade
+	var subjectGrades []*models.SubjectGrade = make([]*models.SubjectGrade, 0)
 	cursor, err := service.subjectGradeCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -69,10 +69,6 @@ func (service *SubjectGradeServiceImpl) GetAllSubjectGrades(ctx context.Context)
 	}
 
 	cursor.Close(ctx)
-
-	if len(subjectGrades) == 0 {
-		return nil, errors.New("no subjectGrades in database")
-	}
 
 	return subjectGrades, nil
 }

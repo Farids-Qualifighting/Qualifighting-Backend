@@ -13,10 +13,10 @@ type Tutor struct {
 }
 
 type UpdateTutor struct {
-	FirstName string               `json:"first_name" bson:"first_name"`
-	LastName  string               `json:"last_name" bson:"last_name"`
-	Email     string               `json:"email" bson:"email"`
-	Phone     string               `json:"phone" bson:"phone"`
-	Subjects  []primitive.ObjectID `json:"subjects" bson:"subjects"`
-	Students  []primitive.ObjectID `json:"students" bson:"students"`
+	FirstName string               `json:"first_name" bson:"first_name,omitempty"`
+	LastName  string               `json:"last_name" bson:"last_name,omitempty"`
+	Email     string               `json:"email" bson:"email,omitempty"`
+	Phone     string               `json:"phone" bson:"phone,omitempty"`
+	Subjects  []primitive.ObjectID `json:"subjects" bson:"subjects,omitempty"`
+	Students  []primitive.ObjectID `json:"students" bson:"students,omitempty"`
 }

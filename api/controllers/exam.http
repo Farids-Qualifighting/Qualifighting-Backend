@@ -1,5 +1,5 @@
 ### create exam
-POST http://localhost:8080/api/v1/exam/create
+POST http://localhost:8080/api/v1/exams/
 content-type: application/json
 
 {
@@ -9,15 +9,15 @@ content-type: application/json
 }
 
 ### get exam by id
-GET http://localhost:8080/api/v1/exam/get/6394c3bc32e00a4f5a020779
+GET http://localhost:8080/api/v1/exams/63a4633e441c3558f8a1b818
 
 ###
 
 # get all exam
-GET http://localhost:8080/api/v1/exam/all
+GET http://localhost:8080/api/v1/exams/
 
 ### update exam by id
-PATCH http://localhost:8080/api/v1/exam/update/6394c3bc32e00a4f5a020779
+PATCH http://localhost:8080/api/v1/exams/63a4c4ab11fba69c2364381d
 content-type: application/json
 
 {
@@ -25,5 +25,5 @@ content-type: application/json
 }
 
 ### delete exam by id
-DELETE http://localhost:8080/api/v1/exam/delete/6394c3bc32e00a4f5a020779 
+DELETE http://localhost:8080/api/v1/exams/63a4c4ab11fba69c2364381d 
 content-type: application/json

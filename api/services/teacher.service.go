@@ -50,7 +50,7 @@ func (service *TeacherServiceImpl) GetTeacher(id *primitive.ObjectID, ctx contex
 }
 
 func (service *TeacherServiceImpl) GetAllTeachers(ctx context.Context) ([]*models.Teacher, error) {
-	var teachers []*models.Teacher
+	var teachers []*models.Teacher = make([]*models.Teacher, 0)
 	cursor, err := service.teacherCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -71,10 +71,6 @@ func (service *TeacherServiceImpl) GetAllTeachers(ctx context.Context) ([]*model
 	}
 
 	cursor.Close(ctx)
-
-	if len(teachers) == 0 {
-		return nil, errors.New("no teachers in database")
-	}
 
 	return teachers, nil
 }

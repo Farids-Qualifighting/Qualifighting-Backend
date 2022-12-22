@@ -46,7 +46,7 @@ func (service *SportServiceImpl) GetSport(id *primitive.ObjectID, ctx context.Co
 }
 
 func (service *SportServiceImpl) GetAllSports(ctx context.Context) ([]*models.Sport, error) {
-	var sports []*models.Sport
+	var sports []*models.Sport = make([]*models.Sport, 0)
 	cursor, err := service.sportCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -67,10 +67,6 @@ func (service *SportServiceImpl) GetAllSports(ctx context.Context) ([]*models.Sp
 	}
 
 	cursor.Close(ctx)
-
-	if len(sports) == 0 {
-		return nil, errors.New("no sports in database")
-	}
 
 	return sports, nil
 }

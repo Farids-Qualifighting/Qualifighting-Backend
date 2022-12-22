@@ -1,42 +1,31 @@
-### create student
-POST http://localhost:8080/api/v1/student/create
+### create teacher
+POST http://localhost:8080/api/v1/teachers/
 content-type: application/json
 
 {
   "first_name": "ulf",
   "last_name": "ulf",
-  "class_teacher": "ulf",
-  "birthday": "0002-01-01T00:00:00Z",
-  "gender": "ulf",
-  "address": {
-    "street": "ulf",
-    "zip": 1,
-    "house_no": 1,
-    "city": "ulf"
-  },
-  "phone": "ulf",
+  "school": ["6392336d2d3dbf230d1f3f03"],
   "email": "ulf",
-  "social_media": "ulf",
-  "certificate": ["ulf"]
-
+  "phone": "ulf"
 }
 
-### get student by id
-GET http://localhost:8080/api/v1/student/get/6392336d2d3dbf230d1f3f03
+### get teacher by id
+GET http://localhost:8080/api/v1/teachers/63a4c91c4a3f5b55f5e5006b
 
 ###
 
-# get all students
-GET http://localhost:8080/api/v1/student/all
+# get all teachers
+GET http://localhost:8080/api/v1/teachers/
 
-### update student by id
-PATCH http://localhost:8080/api/v1/student/update/63923811199afcdde628b678
+### update teacher by id
+PATCH http://localhost:8080/api/v1/teachers/63a4c91c4a3f5b55f5e5006b
 content-type: application/json
 
 {
   "email": "ulf42"
 }
 
-### delete student by id
-DELETE http://localhost:8080/api/v1/student/delete/6392336d2d3dbf230d1f3f03 
+### delete teacher by id
+DELETE http://localhost:8080/api/v1/teachers/63a4c91c4a3f5b55f5e5006b 
 content-type: application/json

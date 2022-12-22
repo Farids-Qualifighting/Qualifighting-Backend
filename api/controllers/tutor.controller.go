@@ -23,13 +23,13 @@ func (controller *TutorController) CreateTutor(ctx *gin.Context) {
 	var tutor models.Tutor
 
 	if err := ctx.ShouldBindJSON(&tutor); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.TutorService.CreateTutor(&tutor, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -37,11 +37,17 @@ func (controller *TutorController) CreateTutor(ctx *gin.Context) {
 
 func (controller *TutorController) GetTutor(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
 	tutor, err := controller.TutorService.GetTutor(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +58,7 @@ func (controller *TutorController) GetAllTutors(ctx *gin.Context) {
 	tutors, err := controller.TutorService.GetAllTutors(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -63,16 +69,21 @@ func (controller *TutorController) UpdateTutor(ctx *gin.Context) {
 	var tutor models.UpdateTutor
 
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
-	if err := ctx.ShouldBindJSON(&tutor); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := controller.TutorService.UpdateTutor(&objectId, &tutor, ctx)
+	if err := ctx.ShouldBindJSON(&tutor); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
-	if err != nil {
+	errService := controller.TutorService.UpdateTutor(&objectId, &tutor, ctx)
+
+	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
@@ -82,11 +93,17 @@ func (controller *TutorController) UpdateTutor(ctx *gin.Context) {
 
 func (controller *TutorController) DeleteTutor(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
-	err := controller.TutorService.DeleteTutor(&objectId, ctx)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	errService := controller.TutorService.DeleteTutor(&objectId, ctx)
+
+	if errService != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

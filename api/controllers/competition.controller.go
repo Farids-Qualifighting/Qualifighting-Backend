@@ -23,13 +23,13 @@ func (controller *CompetitionController) CreateCompetition(ctx *gin.Context) {
 	var competition models.Competition
 
 	if err := ctx.ShouldBindJSON(&competition); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.CompetitionService.CreateCompetition(&competition, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -37,11 +37,17 @@ func (controller *CompetitionController) CreateCompetition(ctx *gin.Context) {
 
 func (controller *CompetitionController) GetCompetition(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
 	competition, err := controller.CompetitionService.GetCompetition(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +58,7 @@ func (controller *CompetitionController) GetAllCompetitions(ctx *gin.Context) {
 	competitions, err := controller.CompetitionService.GetAllCompetitions(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -63,16 +69,21 @@ func (controller *CompetitionController) UpdateCompetition(ctx *gin.Context) {
 	var competition models.UpdateCompetition
 
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
-	if err := ctx.ShouldBindJSON(&competition); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := controller.CompetitionService.UpdateCompetition(&objectId, &competition, ctx)
+	if err := ctx.ShouldBindJSON(&competition); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
-	if err != nil {
+	errService := controller.CompetitionService.UpdateCompetition(&objectId, &competition, ctx)
+
+	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
@@ -82,10 +93,16 @@ func (controller *CompetitionController) UpdateCompetition(ctx *gin.Context) {
 
 func (controller *CompetitionController) DeleteCompetition(ctx *gin.Context) {
 	id := ctx.Param("id")
-	objectId, _ := primitive.ObjectIDFromHex(id)
-	err := controller.CompetitionService.DeleteCompetition(&objectId, ctx)
+	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	errService := controller.CompetitionService.DeleteCompetition(&objectId, ctx)
+
+	if errService != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}

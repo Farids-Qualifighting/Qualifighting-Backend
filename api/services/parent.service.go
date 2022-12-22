@@ -51,7 +51,7 @@ func (service *ParentServiceImpl) GetParent(id *primitive.ObjectID, ctx context.
 }
 
 func (service *ParentServiceImpl) GetAllParents(ctx context.Context) ([]*models.Parent, error) {
-	var parents []*models.Parent
+	var parents []*models.Parent = make([]*models.Parent, 0)
 	cursor, err := service.parentCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -72,10 +72,6 @@ func (service *ParentServiceImpl) GetAllParents(ctx context.Context) ([]*models.
 	}
 
 	cursor.Close(ctx)
-
-	if len(parents) == 0 {
-		return nil, errors.New("no parents in database")
-	}
 
 	return parents, nil
 }
