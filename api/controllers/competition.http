@@ -1,0 +1,31 @@
+### create competition
+POST http://localhost:8080/api/v1/competition/create
+content-type: application/json
+
+{
+  "name": "competition42",
+  "date": "0002-01-01T00:00:00Z",
+  "rank": 1,
+  "won_competition": true,
+  "student_id": "639487bde900f99197853a1b"
+}
+
+### get competition by id
+GET http://localhost:8080/api/v1/competition/get/639488f92d5f25a0ce008bcd
+
+###
+
+# get all competitions
+GET http://localhost:8080/api/v1/competition/all
+
+### update competition by id
+PATCH http://localhost:8080/api/v1/competition/update/639488f92d5f25a0ce008bcd
+content-type: application/json
+
+{
+  "date": "0002-01-04T00:00:42Z"
+}
+
+### delete competition by id
+DELETE http://localhost:8080/api/v1/competition/delete/639488f92d5f25a0ce008bcd 
+content-type: application/json
