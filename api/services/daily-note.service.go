@@ -31,7 +31,6 @@ func NewDailyNoteService(dailyNoteCollection *mongo.Collection) DailyNoteService
 func (service *DailyNoteServiceImpl) CreateDailyNote(dailyNote *models.DailyNote, ctx context.Context) error {
 
 	payload := models.DailyNote{
-		ID:        primitive.NewObjectID(),
 		StudentID: dailyNote.StudentID,
 		CreatedAt: dailyNote.CreatedAt,
 		Subject:   dailyNote.Subject,

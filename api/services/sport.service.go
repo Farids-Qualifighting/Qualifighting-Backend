@@ -31,7 +31,6 @@ func NewSportService(sportCollection *mongo.Collection) SportService {
 func (service *SportServiceImpl) CreateSport(sport *models.Sport, ctx context.Context) error {
 
 	payload := models.Sport{
-		ID:   primitive.NewObjectID(),
 		Name: sport.Name,
 	}
 

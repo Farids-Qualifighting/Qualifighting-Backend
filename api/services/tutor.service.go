@@ -31,7 +31,6 @@ func NewTutorService(tutorCollection *mongo.Collection) TutorService {
 func (service *TutorServiceImpl) CreateTutor(tutor *models.Tutor, ctx context.Context) error {
 
 	payload := models.Tutor{
-		ID:        primitive.NewObjectID(),
 		FirstName: tutor.FirstName,
 		LastName:  tutor.LastName,
 		Email:     tutor.Email,

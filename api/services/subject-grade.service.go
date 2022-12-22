@@ -31,7 +31,6 @@ func NewSubjectGradeService(subjectGradeCollection *mongo.Collection) SubjectGra
 func (service *SubjectGradeServiceImpl) CreateSubjectGrade(subjectGrade *models.SubjectGrade, ctx context.Context) error {
 
 	payload := models.SubjectGrade{
-		ID:                primitive.NewObjectID(),
 		Grade:             subjectGrade.Grade,
 		IntermediateGrade: subjectGrade.IntermediateGrade,
 		StudentID:         subjectGrade.StudentID,

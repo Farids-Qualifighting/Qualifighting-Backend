@@ -31,7 +31,6 @@ func NewSubjectService(subjectCollection *mongo.Collection) SubjectService {
 func (service *SubjectServiceImpl) CreateSubject(subject *models.Subject, ctx context.Context) error {
 
 	payload := models.Subject{
-		ID:         primitive.NewObjectID(),
 		Name:       subject.Name,
 		Teacher:    subject.Teacher,
 		SchoolID:   subject.SchoolID,

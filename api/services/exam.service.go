@@ -31,7 +31,6 @@ func NewExamService(examCollection *mongo.Collection) ExamService {
 func (service *ExamServiceImpl) CreateExam(exam *models.Exam, ctx context.Context) error {
 
 	payload := models.Exam{
-		ID:       primitive.NewObjectID(),
 		Topics:   exam.Topics,
 		Date:     exam.Date,
 		Students: exam.Students,

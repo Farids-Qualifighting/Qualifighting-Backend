@@ -7,7 +7,7 @@ import (
 )
 
 type DailyNote struct {
-	ID        primitive.ObjectID `bson:"_id"`
+	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	StudentID primitive.ObjectID `json:"student_id" bson:"student_id" binding:"required"`
 	CreatedAt time.Time          `json:"created_at" bson:"created_at" binding:"required"`
 	Subject   primitive.ObjectID `json:"subject" bson:"subject" binding:"required"`

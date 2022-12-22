@@ -31,7 +31,6 @@ func NewSchoolService(schoolCollection *mongo.Collection) SchoolService {
 func (service *SchoolServiceImpl) CreateSchool(school *models.School, ctx context.Context) error {
 
 	payload := models.School{
-		ID:       primitive.NewObjectID(),
 		Name:     school.Name,
 		Address:  school.Address,
 		Email:    school.Email,

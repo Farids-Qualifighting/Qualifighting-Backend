@@ -5,7 +5,7 @@ import (
 )
 
 type Subject struct {
-	ID         primitive.ObjectID   `bson:"_id"`
+	ID         primitive.ObjectID   `bson:"_id,omitempty"`
 	Name       string               `json:"name" bson:"name" binding:"required"`
 	Teacher    primitive.ObjectID   `json:"teacher" bson:"teacher" binding:"required"`
 	SchoolID   primitive.ObjectID   `json:"school_id" bson:"school_id" binding:"required"`
