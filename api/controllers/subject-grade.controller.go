@@ -94,11 +94,10 @@ func (controller *SubjectGradeController) DeleteSubjectGrade(ctx *gin.Context) {
 }
 
 func (controller *SubjectGradeController) RegisterSubjectGradeRoutes(routerGroup *gin.RouterGroup) {
-	subjectGradeRoute := routerGroup.Group("/subject-grade")
 
-	subjectGradeRoute.POST("/create", controller.CreateSubjectGrade)
-	subjectGradeRoute.GET("/get/:id", controller.GetSubjectGrade)
-	subjectGradeRoute.GET("/all", controller.GetAllSubjectGrades)
-	subjectGradeRoute.PATCH("/update/:id", controller.UpdateSubjectGrade)
-	subjectGradeRoute.DELETE("/delete/:id", controller.DeleteSubjectGrade)
+	routerGroup.POST("/subject-grades", controller.CreateSubjectGrade)
+	routerGroup.GET("/subject-grades/:id", controller.GetSubjectGrade)
+	routerGroup.GET("/subject-grades", controller.GetAllSubjectGrades)
+	routerGroup.PATCH("/subject-grades/:id", controller.UpdateSubjectGrade)
+	routerGroup.DELETE("/subject-grades/:id", controller.DeleteSubjectGrade)
 }

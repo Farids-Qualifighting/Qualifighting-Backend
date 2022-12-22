@@ -94,11 +94,10 @@ func (controller *TrainerController) DeleteTrainer(ctx *gin.Context) {
 }
 
 func (controller *TrainerController) RegisterTrainerRoutes(routerGroup *gin.RouterGroup) {
-	trainerRoute := routerGroup.Group("/trainer")
 
-	trainerRoute.POST("/create", controller.CreateTrainer)
-	trainerRoute.GET("/get/:id", controller.GetTrainer)
-	trainerRoute.GET("/all", controller.GetAllTrainers)
-	trainerRoute.PATCH("/update/:id", controller.UpdateTrainer)
-	trainerRoute.DELETE("/delete/:id", controller.DeleteTrainer)
+	routerGroup.POST("/trainers", controller.CreateTrainer)
+	routerGroup.GET("/trainers/:id", controller.GetTrainer)
+	routerGroup.GET("/trainers", controller.GetAllTrainers)
+	routerGroup.PATCH("/trainers/:id", controller.UpdateTrainer)
+	routerGroup.DELETE("/trainers/:id", controller.DeleteTrainer)
 }
