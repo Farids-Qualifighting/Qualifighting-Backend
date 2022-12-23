@@ -4,11 +4,11 @@ go 1.18
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
-	firebase.google.com/go/v4 v4.9.0
 	github.com/JeremyLoy/config v1.5.0
-	github.com/aws/aws-sdk-go v1.44.118
+	github.com/aws/aws-sdk-go v1.44.167
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
+	github.com/joho/godotenv v1.4.0
 	github.com/mitchellh/mapstructure v1.5.0
 	go.mongodb.org/mongo-driver v1.10.3
 	google.golang.org/api v0.100.0
@@ -49,7 +49,7 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a // indirect
-	golang.org/x/net v0.0.0-20221017152216-f25eb7ecb193 // indirect
+	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.1.0 // indirect
