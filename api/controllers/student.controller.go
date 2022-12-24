@@ -23,13 +23,13 @@ func (controller *StudentController) CreateStudent(ctx *gin.Context) {
 	var student models.Student
 
 	if err := ctx.ShouldBindJSON(&student); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
 	err := controller.StudentService.CreateStudent(&student, ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
@@ -41,7 +41,7 @@ func (controller *StudentController) GetStudent(ctx *gin.Context) {
 	student, err := controller.StudentService.GetStudent(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -52,7 +52,7 @@ func (controller *StudentController) GetAll(ctx *gin.Context) {
 	students, err := controller.StudentService.GetAllStudents(ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -66,7 +66,7 @@ func (controller *StudentController) UpdateStudent(ctx *gin.Context) {
 	objectId, _ := primitive.ObjectIDFromHex(id)
 
 	if err := ctx.ShouldBindJSON(&student); err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -86,7 +86,7 @@ func (controller *StudentController) DeleteStudent(ctx *gin.Context) {
 	err := controller.StudentService.DeleteStudent(&objectId, ctx)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

@@ -50,7 +50,7 @@ func (service *SchoolServiceImpl) GetSchool(id *primitive.ObjectID, ctx context.
 }
 
 func (service *SchoolServiceImpl) GetAllSchools(ctx context.Context) ([]*models.School, error) {
-	var schools []*models.School
+	var schools []*models.School = make([]*models.School, 0)
 	cursor, err := service.schoolCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -71,10 +71,6 @@ func (service *SchoolServiceImpl) GetAllSchools(ctx context.Context) ([]*models.
 	}
 
 	cursor.Close(ctx)
-
-	if len(schools) == 0 {
-		return nil, errors.New("no schools in database")
-	}
 
 	return schools, nil
 }

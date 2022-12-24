@@ -50,7 +50,7 @@ func (service *CompetitionServiceImpl) GetCompetition(id *primitive.ObjectID, ct
 }
 
 func (service *CompetitionServiceImpl) GetAllCompetitions(ctx context.Context) ([]*models.Competition, error) {
-	var competitions []*models.Competition
+	var competitions []*models.Competition = make([]*models.Competition, 0)
 	cursor, err := service.competitionCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -71,10 +71,6 @@ func (service *CompetitionServiceImpl) GetAllCompetitions(ctx context.Context) (
 	}
 
 	cursor.Close(ctx)
-
-	if len(competitions) == 0 {
-		return nil, errors.New("no competitions in database")
-	}
 
 	return competitions, nil
 }

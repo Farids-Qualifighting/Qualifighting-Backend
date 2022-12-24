@@ -18,11 +18,11 @@ type DailyNote struct {
 }
 
 type UpdateDailyNote struct {
-	StudentID primitive.ObjectID `json:"student_id" bson:"student_id"`
-	CreatedAt time.Time          `json:"created_at" bson:"created_at"`
-	Subject   primitive.ObjectID `json:"subject" bson:"subject"`
-	Rating    uint8              `json:"rating" bson:"rating"`
-	Note      string             `json:"note" bson:"note"`
-	CreatorID primitive.ObjectID `json:"creator_id" bson:"creator_id"`
-	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at"`
+	StudentID primitive.ObjectID `json:"student_id" bson:"student_id,omitempty"`
+	CreatedAt time.Time          `json:"created_at" bson:"created_at,omitempty"`
+	Subject   primitive.ObjectID `json:"subject" bson:"subject,omitempty"`
+	Rating    uint8              `json:"rating" bson:"rating,omitempty"`
+	Note      string             `json:"note" bson:"note,omitempty"`
+	CreatorID primitive.ObjectID `json:"creator_id" bson:"creator_id,omitempty"`
+	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at,omitempty"`
 }

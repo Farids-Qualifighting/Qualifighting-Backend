@@ -8,5 +8,5 @@ type Sport struct {
 }
 
 type UpdateSport struct {
-	Name string `json:"name" bson:"name"`
+	Name string `json:"name" bson:"name,omitempty"`
 }

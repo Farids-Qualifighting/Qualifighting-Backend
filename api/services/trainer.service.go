@@ -49,7 +49,7 @@ func (service *TrainerServiceImpl) GetTrainer(id *primitive.ObjectID, ctx contex
 }
 
 func (service *TrainerServiceImpl) GetAllTrainers(ctx context.Context) ([]*models.Trainer, error) {
-	var trainers []*models.Trainer
+	var trainers []*models.Trainer = make([]*models.Trainer, 0)
 	cursor, err := service.trainerCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -70,10 +70,6 @@ func (service *TrainerServiceImpl) GetAllTrainers(ctx context.Context) ([]*model
 	}
 
 	cursor.Close(ctx)
-
-	if len(trainers) == 0 {
-		return nil, errors.New("no trainers in database")
-	}
 
 	return trainers, nil
 }

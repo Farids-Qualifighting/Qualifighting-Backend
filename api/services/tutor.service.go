@@ -51,7 +51,7 @@ func (service *TutorServiceImpl) GetTutor(id *primitive.ObjectID, ctx context.Co
 }
 
 func (service *TutorServiceImpl) GetAllTutors(ctx context.Context) ([]*models.Tutor, error) {
-	var tutors []*models.Tutor
+	var tutors []*models.Tutor = make([]*models.Tutor, 0)
 	cursor, err := service.tutorCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -72,10 +72,6 @@ func (service *TutorServiceImpl) GetAllTutors(ctx context.Context) ([]*models.Tu
 	}
 
 	cursor.Close(ctx)
-
-	if len(tutors) == 0 {
-		return nil, errors.New("no tutors in database")
-	}
 
 	return tutors, nil
 }

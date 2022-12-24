@@ -14,7 +14,7 @@ type Exam struct {
 }
 
 type UpdateExam struct {
-	Topics   []string             `json:"topics" bson:"topics"`
-	Date     time.Time            `json:"date" bson:"date"`
-	Students []primitive.ObjectID `json:"students" bson:"students"`
+	Topics   []string             `json:"topics" bson:"topics,omitempty"`
+	Date     time.Time            `json:"date" bson:"date,omitempty"`
+	Students []primitive.ObjectID `json:"students" bson:"students,omitempty"`
 }

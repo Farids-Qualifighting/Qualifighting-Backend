@@ -1,42 +1,27 @@
-### create student
-POST http://localhost:8080/api/v1/student/create
+### create sport
+POST http://localhost:8080/api/v1/sports/
 content-type: application/json
 
 {
-  "first_name": "ulf",
-  "last_name": "ulf",
-  "class_teacher": "ulf",
-  "birthday": "0002-01-01T00:00:00Z",
-  "gender": "ulf",
-  "address": {
-    "street": "ulf",
-    "zip": 1,
-    "house_no": 1,
-    "city": "ulf"
-  },
-  "phone": "ulf",
-  "email": "ulf",
-  "social_media": "ulf",
-  "certificate": ["ulf"]
-
+  "name": "ulf"
 }
 
-### get student by id
-GET http://localhost:8080/api/v1/student/get/6392336d2d3dbf230d1f3f03
+### get sport by id
+GET http://localhost:8080/api/v1/sports/63a49ba3563f447e35d571b1
 
 ###
 
-# get all students
-GET http://localhost:8080/api/v1/student/all
+# get all sports
+GET http://localhost:8080/api/v1/sports/
 
-### update student by id
-PATCH http://localhost:8080/api/v1/student/update/63923811199afcdde628b678
+### update sport by id
+PATCH http://localhost:8080/api/v1/sports/63a4c7a44a3f5b55f5e50067
 content-type: application/json
 
 {
-  "email": "ulf42"
+  "name": "ulf42"
 }
 
-### delete student by id
-DELETE http://localhost:8080/api/v1/student/delete/6392336d2d3dbf230d1f3f03 
+### delete sport by id
+DELETE http://localhost:8080/api/v1/sports/63a4c7a44a3f5b55f5e50067 
 content-type: application/json

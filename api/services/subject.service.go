@@ -49,7 +49,7 @@ func (service *SubjectServiceImpl) GetSubject(id *primitive.ObjectID, ctx contex
 }
 
 func (service *SubjectServiceImpl) GetAllSubjects(ctx context.Context) ([]*models.Subject, error) {
-	var subjects []*models.Subject
+	var subjects []*models.Subject = make([]*models.Subject, 0)
 	cursor, err := service.subjectCollection.Find(ctx, bson.D{{}})
 
 	if err != nil {
@@ -70,10 +70,6 @@ func (service *SubjectServiceImpl) GetAllSubjects(ctx context.Context) ([]*model
 	}
 
 	cursor.Close(ctx)
-
-	if len(subjects) == 0 {
-		return nil, errors.New("no subjects in database")
-	}
 
 	return subjects, nil
 }
