@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"qualifighting.backend.de/lib"
 	"qualifighting.backend.de/models"
 )
 
@@ -30,8 +31,18 @@ func NewCompetitionService(competitionCollection *mongo.Collection) CompetitionS
 
 func (service *CompetitionServiceImpl) CreateCompetition(competition *models.Competition, ctx context.Context) error {
 
+	// encryptedCompetition, errEncryption := lib.Encrypt(competition)
+	// if errEncryption != nil {
+	// 	return errEncryption
+	// }
+
+	encryptedName, errEncryption := lib.EncryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if errEncryption != nil {
+		return errEncryption
+	}
+
 	payload := models.Competition{
-		Name:           competition.Name,
+		Name:           encryptedName,
 		Date:           competition.Date,
 		Rank:           competition.Rank,
 		WonCompetition: competition.WonCompetition,
@@ -46,6 +57,11 @@ func (service *CompetitionServiceImpl) GetCompetition(id *primitive.ObjectID, ct
 	var competition *models.Competition
 	query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := service.competitionCollection.FindOne(ctx, query).Decode(&competition)
+	if err != nil {
+		return nil, err
+	}
+	decryptedName, err := lib.DecryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	competition.Name = decryptedName
 	return competition, err
 }
 
