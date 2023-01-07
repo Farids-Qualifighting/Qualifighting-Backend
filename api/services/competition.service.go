@@ -79,6 +79,11 @@ func (service *CompetitionServiceImpl) GetAllCompetitions(ctx context.Context) (
 		if err != nil {
 			return nil, err
 		}
+		decryptedName, err := lib.DecryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		competition.Name = decryptedName
 		competitions = append(competitions, &competition)
 	}
 
