@@ -27,7 +27,7 @@ func (controller *StudentController) CreateStudent(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.StudentService.CreateStudent(&student, ctx)
+	err := controller.StudentService.CreateStudent(student, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
@@ -70,7 +70,7 @@ func (controller *StudentController) UpdateStudent(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.StudentService.UpdateStudent(&objectId, &student, ctx)
+	err := controller.StudentService.UpdateStudent(&objectId, student, ctx)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
