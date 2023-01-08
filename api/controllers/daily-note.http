@@ -13,7 +13,7 @@ content-type: application/json
 }
 
 ### get daily-note by id
-GET http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7
+GET http://localhost:8080/api/v1/daily-notes/63babdf2a5506cb07674e83e
 
 ###
 
@@ -21,13 +21,13 @@ GET http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7
 GET http://localhost:8080/api/v1/daily-notes/
 
 ### update daily-note by id
-PATCH http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7
+PATCH http://localhost:8080/api/v1/daily-notes/63babdf2a5506cb07674e83e
 content-type: application/json
 
 {
- "rating" : 4
+ "note" : "this is a note 42"
 }
 
 ### delete daily-note by id
-DELETE http://localhost:8080/api/v1/daily-notes/63a4c424d799116cf36b36b7 
+DELETE http://localhost:8080/api/v1/daily-notes/63bab9abec24e91478d79dcb 
 content-type: application/json
