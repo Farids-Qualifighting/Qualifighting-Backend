@@ -27,7 +27,7 @@ func (controller *TutorController) CreateTutor(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.TutorService.CreateTutor(&tutor, ctx)
+	err := controller.TutorService.CreateTutor(tutor, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
@@ -81,7 +81,7 @@ func (controller *TutorController) UpdateTutor(ctx *gin.Context) {
 		return
 	}
 
-	errService := controller.TutorService.UpdateTutor(&objectId, &tutor, ctx)
+	errService := controller.TutorService.UpdateTutor(&objectId, tutor, ctx)
 
 	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
