@@ -27,7 +27,7 @@ func (controller *TrainerController) CreateTrainer(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.TrainerService.CreateTrainer(&trainer, ctx)
+	err := controller.TrainerService.CreateTrainer(trainer, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
@@ -81,7 +81,7 @@ func (controller *TrainerController) UpdateTrainer(ctx *gin.Context) {
 		return
 	}
 
-	errService := controller.TrainerService.UpdateTrainer(&objectId, &trainer, ctx)
+	errService := controller.TrainerService.UpdateTrainer(&objectId, trainer, ctx)
 
 	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})

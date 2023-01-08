@@ -7,14 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"qualifighting.backend.de/lib"
 	"qualifighting.backend.de/models"
 )
 
 type TrainerService interface {
-	CreateTrainer(*models.Trainer, context.Context) error
+	CreateTrainer(models.Trainer, context.Context) error
 	GetTrainer(*primitive.ObjectID, context.Context) (*models.Trainer, error)
 	GetAllTrainers(context.Context) ([]*models.Trainer, error)
-	UpdateTrainer(*primitive.ObjectID, *models.UpdateTrainer, context.Context) error
+	UpdateTrainer(*primitive.ObjectID, models.UpdateTrainer, context.Context) error
 	DeleteTrainer(*primitive.ObjectID, context.Context) error
 }
 
@@ -28,13 +29,18 @@ func NewTrainerService(trainerCollection *mongo.Collection) TrainerService {
 	}
 }
 
-func (service *TrainerServiceImpl) CreateTrainer(trainer *models.Trainer, ctx context.Context) error {
+func (service *TrainerServiceImpl) CreateTrainer(trainer models.Trainer, ctx context.Context) error {
+
+	encryptedTrainer, errEncryption := lib.Encrypt(trainer)
+	if errEncryption != nil {
+		return errEncryption
+	}
 
 	payload := models.Trainer{
-		FirstName:  trainer.FirstName,
-		LastName:   trainer.LastName,
-		StudentIDs: trainer.Sport,
-		Sport:      trainer.Sport,
+		FirstName:  encryptedTrainer.FirstName,
+		LastName:   encryptedTrainer.LastName,
+		StudentIDs: encryptedTrainer.Sport,
+		Sport:      encryptedTrainer.Sport,
 	}
 
 	_, err := service.trainerCollection.InsertOne(ctx, payload)
@@ -45,6 +51,22 @@ func (service *TrainerServiceImpl) GetTrainer(id *primitive.ObjectID, ctx contex
 	var trainer *models.Trainer
 	query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := service.trainerCollection.FindOne(ctx, query).Decode(&trainer)
+	if err != nil {
+		return nil, err
+	}
+
+	decryptedFirstName, err := lib.DecryptString(trainer.FirstName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if err != nil {
+		return nil, err
+	}
+	trainer.FirstName = decryptedFirstName
+
+	decryptedLastName, err := lib.DecryptString(trainer.LastName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if err != nil {
+		return nil, err
+	}
+	trainer.LastName = decryptedLastName
+
 	return trainer, err
 }
 
@@ -62,6 +84,19 @@ func (service *TrainerServiceImpl) GetAllTrainers(ctx context.Context) ([]*model
 		if err != nil {
 			return nil, err
 		}
+
+		decryptedFirstName, err := lib.DecryptString(trainer.FirstName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		trainer.FirstName = decryptedFirstName
+
+		decryptedLastName, err := lib.DecryptString(trainer.LastName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		trainer.LastName = decryptedLastName
+
 		trainers = append(trainers, &trainer)
 	}
 
@@ -74,9 +109,15 @@ func (service *TrainerServiceImpl) GetAllTrainers(ctx context.Context) ([]*model
 	return trainers, nil
 }
 
-func (service *TrainerServiceImpl) UpdateTrainer(id *primitive.ObjectID, trainer *models.UpdateTrainer, ctx context.Context) error {
+func (service *TrainerServiceImpl) UpdateTrainer(id *primitive.ObjectID, trainer models.UpdateTrainer, ctx context.Context) error {
+
+	encryptedTrainer, errEncryption := lib.Encrypt(trainer)
+	if errEncryption != nil {
+		return errEncryption
+	}
+
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	update := bson.D{bson.E{Key: "$set", Value: trainer}}
+	update := bson.D{bson.E{Key: "$set", Value: encryptedTrainer}}
 	res, err := service.trainerCollection.UpdateOne(ctx, filter, update)
 
 	if err != nil {

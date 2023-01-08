@@ -10,7 +10,7 @@ content-type: application/json
 }
 
 ### get trainer by id
-GET http://localhost:8080/api/v1/trainers/63a4c93c4a3f5b55f5e5006c
+GET http://localhost:8080/api/v1/trainers/63bad6263213a01914177cda
 
 ###
 
