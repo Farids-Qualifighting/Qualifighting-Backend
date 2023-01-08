@@ -15,7 +15,7 @@ type CompetitionService interface {
 	CreateCompetition(models.Competition, context.Context) error
 	GetCompetition(*primitive.ObjectID, context.Context) (*models.Competition, error)
 	GetAllCompetitions(context.Context) ([]*models.Competition, error)
-	UpdateCompetition(*primitive.ObjectID, *models.UpdateCompetition, context.Context) error
+	UpdateCompetition(*primitive.ObjectID, models.UpdateCompetition, context.Context) error
 	DeleteCompetition(*primitive.ObjectID, context.Context) error
 }
 
@@ -35,11 +35,6 @@ func (service *CompetitionServiceImpl) CreateCompetition(competition models.Comp
 	if errEncryption != nil {
 		return errEncryption
 	}
-
-	// encryptedName, errEncryption := lib.EncryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
-	// if errEncryption != nil {
-	// 	return errEncryption
-	// }
 
 	payload := models.Competition{
 		Name:           encryptedCompetition.Name,
@@ -96,9 +91,15 @@ func (service *CompetitionServiceImpl) GetAllCompetitions(ctx context.Context) (
 	return competitions, nil
 }
 
-func (service *CompetitionServiceImpl) UpdateCompetition(id *primitive.ObjectID, competition *models.UpdateCompetition, ctx context.Context) error {
+func (service *CompetitionServiceImpl) UpdateCompetition(id *primitive.ObjectID, competition models.UpdateCompetition, ctx context.Context) error {
+
+	encryptedCompetition, errEncryption := lib.Encrypt(competition)
+	if errEncryption != nil {
+		return errEncryption
+	}
+
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	update := bson.D{bson.E{Key: "$set", Value: competition}}
+	update := bson.D{bson.E{Key: "$set", Value: encryptedCompetition}}
 	res, err := service.competitionCollection.UpdateOne(ctx, filter, update)
 
 	if err != nil {

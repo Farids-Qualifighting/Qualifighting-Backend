@@ -11,7 +11,7 @@ content-type: application/json
 }
 
 ### get competition by id
-GET http://localhost:8080/api/v1/competitions/63a4c3b9d799116cf36b36b6
+GET http://localhost:8080/api/v1/competitions/63bab57e9e34f18dafb33e4b
 
 ###
 
@@ -19,13 +19,13 @@ GET http://localhost:8080/api/v1/competitions/63a4c3b9d799116cf36b36b6
 GET http://localhost:8080/api/v1/competitions/
 
 ### update competition by id
-PATCH http://localhost:8080/api/v1/competitions/63a4c3b9d799116cf36b36b6
+PATCH http://localhost:8080/api/v1/competitions/63bab57e9e34f18dafb33e4b
 content-type: application/json
 
 {
-  "rank": 5
+  "name": "name of the competition 42"
 }
 
 ### delete competition by id
-DELETE http://localhost:8080/api/v1/competitions/63a4c3b9d799116cf36b36b6 
+DELETE http://localhost:8080/api/v1/competitions/63bab57e9e34f18dafb33e4b 
 content-type: application/json
