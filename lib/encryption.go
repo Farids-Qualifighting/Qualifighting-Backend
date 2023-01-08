@@ -82,11 +82,13 @@ func Encrypt[T any](obj T) (T, error) {
 		if f.Kind() == reflect.String {
 			if v.Type().Field(i).Tag.Get("encryption") == "true" {
 				plainText := f.String()
-				cipherText, errEncryption := encryptString(plainText, key)
-				if errEncryption != nil {
-					return obj, errEncryption
+				if plainText != "" {
+					cipherText, errEncryption := encryptString(plainText, key)
+					if errEncryption != nil {
+						return obj, errEncryption
+					}
+					f.SetString(cipherText)
 				}
-				f.SetString(cipherText)
 			}
 		}
 	}
