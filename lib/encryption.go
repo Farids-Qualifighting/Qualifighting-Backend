@@ -10,6 +10,8 @@ import (
 	"reflect"
 )
 
+const key = "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u"
+
 func EncryptByteArray(plaintext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
@@ -49,7 +51,7 @@ func DecryptByteArray(ciphertext []byte, key []byte) ([]byte, error) {
 	return gcm.Open(nil, nonce, ciphertext, nil)
 }
 
-func EncryptString(plainText string, key string) (string, error) {
+func encryptString(plainText string, key string) (string, error) {
 	encryptedByteArray, err := EncryptByteArray([]byte(plainText), []byte(key))
 
 	if err != nil {
@@ -75,13 +77,12 @@ func Encrypt[T any](obj T) (T, error) {
 		return obj, fmt.Errorf("argument must be a struct")
 	}
 
-	key := "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u"
 	for i := 0; i < v.NumField(); i++ {
 		f := v.Field(i)
 		if f.Kind() == reflect.String {
-			if v.Type().Field(i).Tag.Get("encryption") != "true" {
+			if v.Type().Field(i).Tag.Get("encryption") == "true" {
 				plainText := f.String()
-				cipherText, errEncryption := EncryptString(plainText, key)
+				cipherText, errEncryption := encryptString(plainText, key)
 				if errEncryption != nil {
 					return obj, errEncryption
 				}

@@ -12,7 +12,7 @@ import (
 )
 
 type CompetitionService interface {
-	CreateCompetition(*models.Competition, context.Context) error
+	CreateCompetition(models.Competition, context.Context) error
 	GetCompetition(*primitive.ObjectID, context.Context) (*models.Competition, error)
 	GetAllCompetitions(context.Context) ([]*models.Competition, error)
 	UpdateCompetition(*primitive.ObjectID, *models.UpdateCompetition, context.Context) error
@@ -29,20 +29,20 @@ func NewCompetitionService(competitionCollection *mongo.Collection) CompetitionS
 	}
 }
 
-func (service *CompetitionServiceImpl) CreateCompetition(competition *models.Competition, ctx context.Context) error {
+func (service *CompetitionServiceImpl) CreateCompetition(competition models.Competition, ctx context.Context) error {
 
-	// encryptedCompetition, errEncryption := lib.Encrypt(competition)
-	// if errEncryption != nil {
-	// 	return errEncryption
-	// }
-
-	encryptedName, errEncryption := lib.EncryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	encryptedCompetition, errEncryption := lib.Encrypt(competition)
 	if errEncryption != nil {
 		return errEncryption
 	}
 
+	// encryptedName, errEncryption := lib.EncryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	// if errEncryption != nil {
+	// 	return errEncryption
+	// }
+
 	payload := models.Competition{
-		Name:           encryptedName,
+		Name:           encryptedCompetition.Name,
 		Date:           competition.Date,
 		Rank:           competition.Rank,
 		WonCompetition: competition.WonCompetition,

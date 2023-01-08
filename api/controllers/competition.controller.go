@@ -27,7 +27,7 @@ func (controller *CompetitionController) CreateCompetition(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.CompetitionService.CreateCompetition(&competition, ctx)
+	err := controller.CompetitionService.CreateCompetition(competition, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
