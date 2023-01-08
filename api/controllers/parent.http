@@ -14,19 +14,18 @@ content-type: application/json
   "phone": "ulf",
   "email": "ulf",
   "children" : ["639487bde900f99197853a1b"]
-
 }
 
 ### get parent by id
-GET http://localhost:8080/api/v1/parents/63a4c4ee11fba69c2364381e
+GET http://localhost:8080/api/v1/parents/63bac2b784aa405fe75ec3e8
 
 ###
 
-# get all parent
+# get all parents
 GET http://localhost:8080/api/v1/parents/
 
 ### update parent by id
-PATCH http://localhost:8080/api/v1/parents/63a4c4ee11fba69c2364381e
+PATCH http://localhost:8080/api/v1/parents/63bac2b784aa405fe75ec3e8
 content-type: application/json
 
 {
@@ -37,5 +36,5 @@ content-type: application/json
 }
 
 ### delete parent by id
-DELETE http://localhost:8080/api/v1/parents/63a4c4ee11fba69c2364381e 
+DELETE http://localhost:8080/api/v1/parents/63bac2654d695be785aa9b13 
 content-type: application/json
