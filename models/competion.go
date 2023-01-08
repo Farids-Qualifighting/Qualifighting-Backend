@@ -16,7 +16,7 @@ type Competition struct {
 }
 
 type UpdateCompetition struct {
-	Name           string             `json:"name" bson:"name,omitempty"`
+	Name           string             `json:"name" bson:"name,omitempty" encryption:"true"`
 	Date           time.Time          `json:"date" bson:"date,omitempty"`
 	Rank           uint8              `json:"rank" bson:"rank,omitempty"`
 	WonCompetition bool               `json:"won_competition" bson:"won_competition,omitempty"`
