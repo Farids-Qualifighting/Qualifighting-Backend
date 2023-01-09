@@ -7,14 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"qualifighting.backend.de/lib"
 	"qualifighting.backend.de/models"
 )
 
 type TeacherService interface {
-	CreateTeacher(*models.Teacher, context.Context) error
+	CreateTeacher(models.Teacher, context.Context) error
 	GetTeacher(*primitive.ObjectID, context.Context) (*models.Teacher, error)
 	GetAllTeachers(context.Context) ([]*models.Teacher, error)
-	UpdateTeacher(*primitive.ObjectID, *models.UpdateTeacher, context.Context) error
+	UpdateTeacher(*primitive.ObjectID, models.UpdateTeacher, context.Context) error
 	DeleteTeacher(*primitive.ObjectID, context.Context) error
 }
 
@@ -28,14 +29,19 @@ func NewTeacherService(teacherCollection *mongo.Collection) TeacherService {
 	}
 }
 
-func (service *TeacherServiceImpl) CreateTeacher(teacher *models.Teacher, ctx context.Context) error {
+func (service *TeacherServiceImpl) CreateTeacher(teacher models.Teacher, ctx context.Context) error {
+
+	encryptedTeacher, errEncryption := lib.Encrypt(teacher)
+	if errEncryption != nil {
+		return errEncryption
+	}
 
 	payload := models.Teacher{
-		FirstName: teacher.FirstName,
-		LastName:  teacher.LastName,
-		SchoolID:  teacher.SchoolID,
-		Email:     teacher.Email,
-		Phone:     teacher.Phone,
+		FirstName: encryptedTeacher.FirstName,
+		LastName:  encryptedTeacher.LastName,
+		SchoolID:  encryptedTeacher.SchoolID,
+		Email:     encryptedTeacher.Email,
+		Phone:     encryptedTeacher.Phone,
 	}
 
 	_, err := service.teacherCollection.InsertOne(ctx, payload)
@@ -46,6 +52,34 @@ func (service *TeacherServiceImpl) GetTeacher(id *primitive.ObjectID, ctx contex
 	var teacher *models.Teacher
 	query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := service.teacherCollection.FindOne(ctx, query).Decode(&teacher)
+	if err != nil {
+		return nil, err
+	}
+
+	decryptedFirstName, err := lib.DecryptString(teacher.FirstName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if err != nil {
+		return nil, err
+	}
+	teacher.FirstName = decryptedFirstName
+
+	decryptedLastName, err := lib.DecryptString(teacher.LastName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if err != nil {
+		return nil, err
+	}
+	teacher.LastName = decryptedLastName
+
+	decryptedEmail, err := lib.DecryptString(teacher.Email, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if err != nil {
+		return nil, err
+	}
+	teacher.Email = decryptedEmail
+
+	decryptedPhone, err := lib.DecryptString(teacher.Phone, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	if err != nil {
+		return nil, err
+	}
+	teacher.Phone = decryptedPhone
+
 	return teacher, err
 }
 
@@ -63,6 +97,31 @@ func (service *TeacherServiceImpl) GetAllTeachers(ctx context.Context) ([]*model
 		if err != nil {
 			return nil, err
 		}
+
+		decryptedFirstName, err := lib.DecryptString(teacher.FirstName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		teacher.FirstName = decryptedFirstName
+
+		decryptedLastName, err := lib.DecryptString(teacher.LastName, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		teacher.LastName = decryptedLastName
+
+		decryptedEmail, err := lib.DecryptString(teacher.Email, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		teacher.Email = decryptedEmail
+
+		decryptedPhone, err := lib.DecryptString(teacher.Phone, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		teacher.Phone = decryptedPhone
+
 		teachers = append(teachers, &teacher)
 	}
 
@@ -75,9 +134,15 @@ func (service *TeacherServiceImpl) GetAllTeachers(ctx context.Context) ([]*model
 	return teachers, nil
 }
 
-func (service *TeacherServiceImpl) UpdateTeacher(id *primitive.ObjectID, teacher *models.UpdateTeacher, ctx context.Context) error {
+func (service *TeacherServiceImpl) UpdateTeacher(id *primitive.ObjectID, teacher models.UpdateTeacher, ctx context.Context) error {
+
+	encryptedTeacher, errEncryption := lib.Encrypt(teacher)
+	if errEncryption != nil {
+		return errEncryption
+	}
+
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	update := bson.D{bson.E{Key: "$set", Value: teacher}}
+	update := bson.D{bson.E{Key: "$set", Value: encryptedTeacher}}
 	res, err := service.teacherCollection.UpdateOne(ctx, filter, update)
 
 	if err != nil {

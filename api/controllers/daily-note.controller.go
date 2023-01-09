@@ -27,7 +27,7 @@ func (controller *DailyNoteController) CreateDailyNote(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.DailyNoteService.CreateDailyNote(&note, ctx)
+	err := controller.DailyNoteService.CreateDailyNote(note, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
@@ -81,7 +81,7 @@ func (controller *DailyNoteController) UpdateDailyNotes(ctx *gin.Context) {
 		return
 	}
 
-	errService := controller.DailyNoteService.UpdateDailyNote(&objectId, &note, ctx)
+	errService := controller.DailyNoteService.UpdateDailyNote(&objectId, note, ctx)
 
 	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})

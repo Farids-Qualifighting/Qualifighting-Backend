@@ -8,7 +8,7 @@ import (
 
 type Competition struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty"`
-	Name           string             `json:"name" bson:"name" binding:"required"`
+	Name           string             `json:"name" bson:"name" binding:"required" encryption:"true"`
 	Date           time.Time          `json:"date" bson:"date" binding:"required"`
 	Rank           uint8              `json:"rank" bson:"rank" binding:"required"`
 	WonCompetition bool               `json:"won_competition" bson:"won_competition" binding:"required"`
@@ -16,7 +16,7 @@ type Competition struct {
 }
 
 type UpdateCompetition struct {
-	Name           string             `json:"name" bson:"name,omitempty"`
+	Name           string             `json:"name" bson:"name,omitempty" encryption:"true"`
 	Date           time.Time          `json:"date" bson:"date,omitempty"`
 	Rank           uint8              `json:"rank" bson:"rank,omitempty"`
 	WonCompetition bool               `json:"won_competition" bson:"won_competition,omitempty"`

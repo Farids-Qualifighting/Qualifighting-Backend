@@ -27,7 +27,7 @@ func (controller *ParentController) CreateParent(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.ParentService.CreateParent(&parent, ctx)
+	err := controller.ParentService.CreateParent(parent, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
@@ -82,7 +82,7 @@ func (controller *ParentController) UpdateParent(ctx *gin.Context) {
 		return
 	}
 
-	errService := controller.ParentService.UpdateParent(&objectId, &parent, ctx)
+	errService := controller.ParentService.UpdateParent(&objectId, parent, ctx)
 
 	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})

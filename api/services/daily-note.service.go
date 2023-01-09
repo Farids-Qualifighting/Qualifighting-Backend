@@ -7,14 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"qualifighting.backend.de/lib"
 	"qualifighting.backend.de/models"
 )
 
 type DailyNoteService interface {
-	CreateDailyNote(*models.DailyNote, context.Context) error
+	CreateDailyNote(models.DailyNote, context.Context) error
 	GetDailyNote(*primitive.ObjectID, context.Context) (*models.DailyNote, error)
 	GetAllDailyNotes(context.Context) ([]*models.DailyNote, error)
-	UpdateDailyNote(*primitive.ObjectID, *models.UpdateDailyNote, context.Context) error
+	UpdateDailyNote(*primitive.ObjectID, models.UpdateDailyNote, context.Context) error
 	DeleteDailyNote(*primitive.ObjectID, context.Context) error
 }
 
@@ -28,16 +29,21 @@ func NewDailyNoteService(dailyNoteCollection *mongo.Collection) DailyNoteService
 	}
 }
 
-func (service *DailyNoteServiceImpl) CreateDailyNote(dailyNote *models.DailyNote, ctx context.Context) error {
+func (service *DailyNoteServiceImpl) CreateDailyNote(dailyNote models.DailyNote, ctx context.Context) error {
+
+	encryptedDailyNote, errEncryption := lib.Encrypt(dailyNote)
+	if errEncryption != nil {
+		return errEncryption
+	}
 
 	payload := models.DailyNote{
-		StudentID: dailyNote.StudentID,
-		CreatedAt: dailyNote.CreatedAt,
-		Subject:   dailyNote.Subject,
-		Rating:    dailyNote.Rating,
-		Note:      dailyNote.Note,
-		CreatorID: dailyNote.CreatorID,
-		UpdatedAt: dailyNote.UpdatedAt,
+		StudentID: encryptedDailyNote.StudentID,
+		CreatedAt: encryptedDailyNote.CreatedAt,
+		Subject:   encryptedDailyNote.Subject,
+		Rating:    encryptedDailyNote.Rating,
+		Note:      encryptedDailyNote.Note,
+		CreatorID: encryptedDailyNote.CreatorID,
+		UpdatedAt: encryptedDailyNote.UpdatedAt,
 	}
 
 	_, err := service.dailyNoteCollection.InsertOne(ctx, payload)
@@ -48,6 +54,11 @@ func (service *DailyNoteServiceImpl) GetDailyNote(id *primitive.ObjectID, ctx co
 	var dailyNote *models.DailyNote
 	query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := service.dailyNoteCollection.FindOne(ctx, query).Decode(&dailyNote)
+	if err != nil {
+		return nil, err
+	}
+	decryptedNote, err := lib.DecryptString(dailyNote.Note, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	dailyNote.Note = decryptedNote
 	return dailyNote, err
 }
 
@@ -65,6 +76,11 @@ func (service *DailyNoteServiceImpl) GetAllDailyNotes(ctx context.Context) ([]*m
 		if err != nil {
 			return nil, err
 		}
+		decryptedNote, err := lib.DecryptString(dailyNote.Note, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		dailyNote.Note = decryptedNote
 		dailyNotes = append(dailyNotes, &dailyNote)
 	}
 
@@ -77,9 +93,15 @@ func (service *DailyNoteServiceImpl) GetAllDailyNotes(ctx context.Context) ([]*m
 	return dailyNotes, nil
 }
 
-func (service *DailyNoteServiceImpl) UpdateDailyNote(id *primitive.ObjectID, dailyNote *models.UpdateDailyNote, ctx context.Context) error {
+func (service *DailyNoteServiceImpl) UpdateDailyNote(id *primitive.ObjectID, dailyNote models.UpdateDailyNote, ctx context.Context) error {
+
+	encryptedDailyNote, errEncryption := lib.Encrypt(dailyNote)
+	if errEncryption != nil {
+		return errEncryption
+	}
+
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	update := bson.D{bson.E{Key: "$set", Value: dailyNote}}
+	update := bson.D{bson.E{Key: "$set", Value: encryptedDailyNote}}
 	res, err := service.dailyNoteCollection.UpdateOne(ctx, filter, update)
 
 	if err != nil {

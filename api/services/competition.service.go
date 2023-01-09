@@ -7,14 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"qualifighting.backend.de/lib"
 	"qualifighting.backend.de/models"
 )
 
 type CompetitionService interface {
-	CreateCompetition(*models.Competition, context.Context) error
+	CreateCompetition(models.Competition, context.Context) error
 	GetCompetition(*primitive.ObjectID, context.Context) (*models.Competition, error)
 	GetAllCompetitions(context.Context) ([]*models.Competition, error)
-	UpdateCompetition(*primitive.ObjectID, *models.UpdateCompetition, context.Context) error
+	UpdateCompetition(*primitive.ObjectID, models.UpdateCompetition, context.Context) error
 	DeleteCompetition(*primitive.ObjectID, context.Context) error
 }
 
@@ -28,10 +29,15 @@ func NewCompetitionService(competitionCollection *mongo.Collection) CompetitionS
 	}
 }
 
-func (service *CompetitionServiceImpl) CreateCompetition(competition *models.Competition, ctx context.Context) error {
+func (service *CompetitionServiceImpl) CreateCompetition(competition models.Competition, ctx context.Context) error {
+
+	encryptedCompetition, errEncryption := lib.Encrypt(competition)
+	if errEncryption != nil {
+		return errEncryption
+	}
 
 	payload := models.Competition{
-		Name:           competition.Name,
+		Name:           encryptedCompetition.Name,
 		Date:           competition.Date,
 		Rank:           competition.Rank,
 		WonCompetition: competition.WonCompetition,
@@ -46,6 +52,11 @@ func (service *CompetitionServiceImpl) GetCompetition(id *primitive.ObjectID, ct
 	var competition *models.Competition
 	query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := service.competitionCollection.FindOne(ctx, query).Decode(&competition)
+	if err != nil {
+		return nil, err
+	}
+	decryptedName, err := lib.DecryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+	competition.Name = decryptedName
 	return competition, err
 }
 
@@ -63,6 +74,11 @@ func (service *CompetitionServiceImpl) GetAllCompetitions(ctx context.Context) (
 		if err != nil {
 			return nil, err
 		}
+		decryptedName, err := lib.DecryptString(competition.Name, "eThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u")
+		if err != nil {
+			return nil, err
+		}
+		competition.Name = decryptedName
 		competitions = append(competitions, &competition)
 	}
 
@@ -75,9 +91,15 @@ func (service *CompetitionServiceImpl) GetAllCompetitions(ctx context.Context) (
 	return competitions, nil
 }
 
-func (service *CompetitionServiceImpl) UpdateCompetition(id *primitive.ObjectID, competition *models.UpdateCompetition, ctx context.Context) error {
+func (service *CompetitionServiceImpl) UpdateCompetition(id *primitive.ObjectID, competition models.UpdateCompetition, ctx context.Context) error {
+
+	encryptedCompetition, errEncryption := lib.Encrypt(competition)
+	if errEncryption != nil {
+		return errEncryption
+	}
+
 	filter := bson.D{bson.E{Key: "_id", Value: id}}
-	update := bson.D{bson.E{Key: "$set", Value: competition}}
+	update := bson.D{bson.E{Key: "$set", Value: encryptedCompetition}}
 	res, err := service.competitionCollection.UpdateOne(ctx, filter, update)
 
 	if err != nil {

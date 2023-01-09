@@ -11,7 +11,7 @@ content-type: application/json
 }
 
 ### get teacher by id
-GET http://localhost:8080/api/v1/teachers/63a4c91c4a3f5b55f5e5006b
+GET http://localhost:8080/api/v1/teachers/63bad3bd0af4c48f77e9975e
 
 ###
 

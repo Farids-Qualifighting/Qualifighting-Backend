@@ -27,7 +27,7 @@ func (controller *TeacherController) CreateTeacher(ctx *gin.Context) {
 		return
 	}
 
-	err := controller.TeacherService.CreateTeacher(&teacher, ctx)
+	err := controller.TeacherService.CreateTeacher(teacher, ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
@@ -81,7 +81,7 @@ func (controller *TeacherController) UpdateTeacher(ctx *gin.Context) {
 		return
 	}
 
-	errService := controller.TeacherService.UpdateTeacher(&objectId, &teacher, ctx)
+	errService := controller.TeacherService.UpdateTeacher(&objectId, teacher, ctx)
 
 	if errService != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
